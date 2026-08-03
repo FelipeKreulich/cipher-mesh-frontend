@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.github
+.husky
+coverage
+tests
+*.md
+.env*
