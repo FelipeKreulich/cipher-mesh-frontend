@@ -190,7 +190,7 @@
      the eyebrow. The prefix lives in CSS: it is decoration, not content, and
      screen readers should hear the command alone. */
   .prompt {
-    @apply text-faint font-mono text-xs tracking-wide sm:text-sm;
+    @apply font-mono text-xs tracking-wide text-faint sm:text-sm;
   }
 
   .prompt::before {
@@ -219,7 +219,7 @@
   }
 
   .panel {
-    @apply border-line bg-panel rounded-sm border;
+    @apply rounded-sm border border-line bg-panel;
   }
 
   /* CRT texture. Deliberately near-invisible: it should read as a surface,
@@ -239,7 +239,7 @@
   }
 
   .prose-body {
-    @apply text-dim text-base leading-relaxed sm:text-lg;
+    @apply text-base leading-relaxed text-dim sm:text-lg;
   }
 
   .shell {

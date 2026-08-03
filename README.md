@@ -13,14 +13,14 @@ envelope the same length, and no sender attached to any of them.
 
 ## Stack
 
-|            |                                                     |
-| ---------- | --------------------------------------------------- |
-| Framework  | Next.js 16 (App Router, Turbopack)                  |
+|            |                                                         |
+| ---------- | ------------------------------------------------------- |
+| Framework  | Next.js 16 (App Router, Turbopack)                      |
 | Styling    | Tailwind CSS v4, design tokens in `src/app/globals.css` |
-| Components | shadcn/ui (`radix-nova`), React Bits effects        |
-| Motion     | Motion, GSAP (SplitText + ScrambleText), raw WebGL2 |
-| i18n       | next-intl — English and Portuguese                  |
-| Tests      | Vitest + Testing Library                            |
+| Components | shadcn/ui (`radix-nova`), React Bits effects            |
+| Motion     | Motion, GSAP (SplitText + ScrambleText), raw WebGL2     |
+| i18n       | next-intl — English and Portuguese                      |
+| Tests      | Vitest + Testing Library                                |
 
 ## Running it
 
@@ -29,15 +29,15 @@ npm install
 npm run dev          # http://localhost:3000 → redirects to /en
 ```
 
-| Script               | What it does                                   |
-| -------------------- | ---------------------------------------------- |
-| `npm run dev`        | Development server                             |
-| `npm run build`      | Production build                               |
-| `npm run lint`       | ESLint                                         |
-| `npm run format`     | Prettier (writes)                              |
-| `npm run typecheck`  | `tsc --noEmit`                                 |
-| `npm test`           | Vitest, once                                   |
-| `npm run validate`   | Lint + format check + typecheck + tests        |
+| Script              | What it does                            |
+| ------------------- | --------------------------------------- |
+| `npm run dev`       | Development server                      |
+| `npm run build`     | Production build                        |
+| `npm run lint`      | ESLint                                  |
+| `npm run format`    | Prettier (writes)                       |
+| `npm run typecheck` | `tsc --noEmit`                          |
+| `npm test`          | Vitest, once                            |
+| `npm run validate`  | Lint + format check + typecheck + tests |
 
 `npm run validate` is what CI runs. Run it before pushing.
 
