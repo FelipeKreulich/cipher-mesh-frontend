@@ -1,0 +1,92 @@
+name: Deploy the site
+
+# Updates the landing page on the public hub, which serves it from the same
+# domain as the relay.
+#
+# The key used here does NOT give a shell on the server: in authorized_keys it
+# is restricted to `command="/opt/ciphermesh/deploy-site.sh"` with forwarding
+# and PTY disabled. If the secret leaks, the worst an attacker can do is trigger
+# a redeploy of the image already published from master — not read files, not
+# open a session.
+#
+# Called by the docker workflow once the image is in GHCR, so the server never
+# pulls a tag that does not exist yet.
+on:
+  workflow_call:
+  workflow_dispatch: # manual redeploy from the Actions tab
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: false # never interrupt a deploy halfway
+
+jobs:
+  deploy:
+    name: Update the site in production
+    runs-on: ubuntu-latest
+    # The environment allows requiring manual approval before a deploy, if you
+    # ever want it (Settings > Environments > production > required reviewers).
+    environment: production
+    steps:
+      - name: Prepare the SSH key
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Pin the host key: without this a MITM could impersonate the server
+          # and receive the deploy command.
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Trigger the deploy
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          # The remote command is ignored: authorized_keys forces deploy-site.sh.
+          ssh -i ~/.ssh/deploy_key \
+              -o StrictHostKeyChecking=yes \
+              -o BatchMode=yes \
+              -o ConnectTimeout=20 \
+              "$DEPLOY_USER@$DEPLOY_HOST" true
+
+      - name: Confirm the site is serving
+        env:
+          SITE_URL: ${{ vars.DEPLOY_SITE_URL || 'https://ciphermesh.de/en' }}
+        run: |
+          for i in $(seq 1 20); do
+            code=$(curl -fsS -o /dev/null -w '%{http_code}' --max-time 10 "$SITE_URL" || true)
+            if [ "$code" = "200" ]; then
+              echo "Site responding at $SITE_URL"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "The site did not return 200 at $SITE_URL after the deploy" >&2
+          exit 1
+
+      - name: Confirm the relay is still reachable
+        env:
+          # Sharing a domain means a broken site config can take the relay with
+          # it. A WebSocket handshake must still reach the relay and not the
+          # landing page, so this checks for the upgrade rather than a 200.
+          RELAY_HOST: ${{ vars.DEPLOY_RELAY_HOST || 'ciphermesh.de' }}
+        run: |
+          code=$(curl -fsS -o /dev/null -w '%{http_code}' --max-time 10 \
+                   -H "Connection: Upgrade" \
+                   -H "Upgrade: websocket" \
+                   -H "Sec-WebSocket-Version: 13" \
+                   -H "Sec-WebSocket-Key: AAAAAAAAAAAAAAAAAAAAAA==" \
+                   "https://$RELAY_HOST/" || true)
+          # 101 is the upgrade the relay answers with. Anything in the 200s means
+          # the request was served by the site, which would mean chat is broken.
+          if [ "$code" = "101" ]; then
+            echo "Relay still answering the WebSocket upgrade on $RELAY_HOST"
+          elif [ "${code#2}" != "$code" ]; then
+            echo "The site answered a WebSocket upgrade on $RELAY_HOST (got $code) — clients cannot connect" >&2
+            exit 1
+          else
+            echo "Unexpected status $code from $RELAY_HOST; not failing the deploy, but check it"
+          fi
