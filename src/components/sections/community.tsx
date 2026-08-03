@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 
+import { Presence } from "@/components/site/presence";
 import { Reveal } from "@/components/site/reveal";
 import { Section } from "@/components/site/section";
 import { Button } from "@/components/ui/button";
@@ -25,14 +26,19 @@ export function Community() {
     >
       <Reveal>
         <div className="scanlines relative overflow-hidden rounded-sm border border-line bg-panel">
-          <div className="flex items-center gap-2 border-b border-line/80 px-4 py-2.5">
-            <span
-              className="size-2 rounded-full bg-signal"
-              aria-hidden="true"
-            />
-            <span className="font-mono text-[11px] tracking-wide text-faint uppercase">
-              {t("connectTitle")}
-            </span>
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line/80 px-4 py-2.5">
+            <div className="flex items-center gap-2">
+              <span
+                className="size-2 rounded-full bg-signal"
+                aria-hidden="true"
+              />
+              <span className="font-mono text-[11px] tracking-wide text-faint uppercase">
+                {t("connectTitle")}
+              </span>
+            </div>
+            {/* The one live thing on the page: whether it is worth joining
+                right now. Renders nothing when the relay cannot be reached. */}
+            <Presence />
           </div>
 
           <dl className="space-y-2 px-5 py-6 font-mono text-sm sm:px-7 sm:py-8">
