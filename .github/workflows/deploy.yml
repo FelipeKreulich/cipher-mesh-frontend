@@ -74,7 +74,11 @@ jobs:
           # landing page, so this checks for the upgrade rather than a 200.
           RELAY_HOST: ${{ vars.DEPLOY_RELAY_HOST || 'ciphermesh.de' }}
         run: |
-          code=$(curl -fsS -o /dev/null -w '%{http_code}' --max-time 10 \
+          # --http1.1 is required, not cosmetic: over HTTP/2 the Connection
+          # header is forbidden and curl drops it, so the upgrade never matches
+          # and the site answers instead. The CipherMesh client is a Node ws
+          # client and always speaks HTTP/1.1, so this is what it really does.
+          code=$(curl -fsS --http1.1 -o /dev/null -w '%{http_code}' --max-time 10 \
                    -H "Connection: Upgrade" \
                    -H "Upgrade: websocket" \
                    -H "Sec-WebSocket-Version: 13" \
