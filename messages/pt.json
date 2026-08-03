@@ -126,6 +126,10 @@
     "prompt": "ciphermesh --hub ciphermesh.de",
     "title": "Agora existe um lugar para se encontrar",
     "lead": "Durante muito tempo, usar o CipherMesh exigia já conhecer alguém que rodasse um relay. Isso mudou: ciphermesh.de é um hub público, gratuito, aberto a qualquer pessoa — e é ali que a comunidade do projeto acontece.",
+    "presence": {
+      "online": "{range} pessoas no hub agora",
+      "empty": "Ninguém no hub agora — seja o primeiro"
+    },
     "connectTitle": "Digite isto no prompt",
     "connectNote": "É esse o fluxo inteiro de entrada. O hub fica sempre no ar, então ninguém precisa combinar quem vai subir o servidor.",
     "items": {

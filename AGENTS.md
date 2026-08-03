@@ -40,6 +40,15 @@ each checkable against the client repository. Update them there, once.
 say so in a comment (they render inline, fill their container, respect reduced
 motion). ESLint exempts these paths instead of us patching upstream.
 
+**Presence is a range, never a number.** `/api/presence` passes through what the
+relay publishes — `1-5`, `6-20` — validated against a known set, so a
+misconfigured relay cannot put arbitrary text on the page. Never ask the relay
+for an exact count, a room name or a nickname: a live number would let anyone
+polling the page watch people arrive and leave, which is the metadata the whole
+project exists to withhold. When the relay is unreachable the component renders
+**nothing** — an error or a zero would tell every visitor the project is dead
+during a blip.
+
 **Colour carries meaning.** Violet is what you hold, cyan is what is on the
 wire, amber is the single warning on the page (plugins have no sandbox). A
 fourth accent dilutes all three.
