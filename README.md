@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CipherMesh — landing page
 
-## Getting Started
+The website for [CipherMesh](https://github.com/FelipeKreulich/secret-chat-lan), a
+terminal chat where the relay only ever sees ciphertext.
 
-First, run the development server:
+The page has one job: make the central claim checkable in the first five
+seconds. The hero shows the same conversation twice — the plaintext on your
+machine and the sealed envelope the relay stores — one envelope per line, every
+envelope the same length, and no sender attached to any of them.
+
+**Live:** [ciphermesh.de](https://ciphermesh.de) · **Client:**
+[`npx ciphermesh@latest`](https://www.npmjs.com/package/ciphermesh)
+
+## Stack
+
+|            |                                                     |
+| ---------- | --------------------------------------------------- |
+| Framework  | Next.js 16 (App Router, Turbopack)                  |
+| Styling    | Tailwind CSS v4, design tokens in `src/app/globals.css` |
+| Components | shadcn/ui (`radix-nova`), React Bits effects        |
+| Motion     | Motion, GSAP (SplitText + ScrambleText), raw WebGL2 |
+| i18n       | next-intl — English and Portuguese                  |
+| Tests      | Vitest + Testing Library                            |
+
+## Running it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000 → redirects to /en
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Script               | What it does                                   |
+| -------------------- | ---------------------------------------------- |
+| `npm run dev`        | Development server                             |
+| `npm run build`      | Production build                               |
+| `npm run lint`       | ESLint                                         |
+| `npm run format`     | Prettier (writes)                              |
+| `npm run typecheck`  | `tsc --noEmit`                                 |
+| `npm test`           | Vitest, once                                   |
+| `npm run validate`   | Lint + format check + typecheck + tests        |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`npm run validate` is what CI runs. Run it before pushing.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Layout
 
-## Learn More
+```
+messages/                 en.json / pt.json — all copy lives here
+src/
+  app/[locale]/           layout, page, error, not-found
+  app/icon.svg            the mark, also the favicon
+  components/sections/    one file per section of the page
+  components/site/        header, footer, shared page furniture
+  components/ui/          shadcn primitives (vendored — do not hand-edit)
+  components/*.tsx        React Bits effects (vendored, locally adapted)
+  i18n/                   next-intl routing, navigation, request config
+  lib/site.ts             links and the numbers the page claims
+  lib/cipher.ts           deterministic stand-in for a sealed envelope
+tests/                    Vitest suites
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Copy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+No string is hardcoded in a component unless it is product UI — the client's own
+prompts (`Server`, `Room`, `/join`) stay in English everywhere, because the
+client has no i18n layer and never pretends to. Everything else goes in
+`messages/en.json` and `messages/pt.json`, and a test fails if the two files
+drift apart.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Watch the braces: next-intl parses every string as ICU, so `{ send }` sitting in
+prose becomes a variable the component never passes and the section throws at
+render time. A test catches that too.
 
-## Deploy on Vercel
+### Design tokens
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`src/app/globals.css` is the single source. Violet (`--color-signal`) marks
+anything you hold — plaintext, your keys, your input. Cyan (`--color-wire`)
+marks anything on the wire. Amber (`--color-warn`) is reserved for the one
+warning on the page. Nothing else gets an accent.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Numbers
+
+`src/lib/site.ts` holds the test count, command count and version the page
+claims. Each is checkable against the client repository, so they move only when
+it does.
+
+### Vendored components
+
+`src/components/ui/**` and the React Bits effects (`DecryptedText`,
+`ScrambledText`, `Noise`) come from `shadcn add`. They are re-fetched on update,
+so a hand-edit there is a hand-edit you will lose — the local adaptations that
+do exist are marked with a comment saying so, and ESLint exempts these paths
+from `react-hooks/set-state-in-effect` rather than patching them.
+
+## Contributing
+
+Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md)
+for the workflow and the language rules. Short version: issues and PRs in
+English, commits in Portuguese, branch off `dev`.
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).

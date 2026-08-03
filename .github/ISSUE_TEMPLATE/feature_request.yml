@@ -1,0 +1,24 @@
+name: Idea
+description: Suggest a change to the site — content, design or behaviour.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is missing or unclear
+      description: Describe the problem before the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would do about it
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Fits the site
+      options:
+        - label: The claim it makes is checkable in the CipherMesh repository
+        - label: It works with reduced motion and on a phone

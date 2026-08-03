@@ -1,0 +1,270 @@
+{
+  "meta": {
+    "title": "CipherMesh — end-to-end encrypted terminal chat",
+    "description": "A terminal chat where encryption is the product. The relay only ever sees ciphertext: it cannot read, alter or fake anything. Free and open source."
+  },
+  "nav": {
+    "what": "What it is",
+    "security": "Security",
+    "verify": "Verify",
+    "start": "Get started",
+    "community": "Community",
+    "controls": "Controls",
+    "plugins": "Plugins",
+    "open": "Open source",
+    "support": "Support",
+    "github": "GitHub",
+    "sections": "Sections",
+    "menu": "Open menu",
+    "skipToContent": "Skip to content",
+    "language": "Language"
+  },
+  "hero": {
+    "prompt": "cat what-the-server-sees",
+    "title": "The server can't read a single word.",
+    "lead": "CipherMesh is a chat that lives in your terminal. Messages are encrypted on your machine and decrypted on your friend's. The relay in between only forwards sealed envelopes — it has no way to open them.",
+    "youType": "What you type",
+    "youTypeMeta": "plaintext · never leaves this machine",
+    "relaySees": "What the relay stores",
+    "relaySeesMeta": "128 B · sender unknown · room unknown",
+    "relayNote": "Same message, both sides. The envelope is padded to a fixed size, so its length says nothing about what is inside — and it is not signed with a name, so the relay cannot tell who sent it.",
+    "transcript": [
+      { "who": "you", "text": "the key never leaves this machine" },
+      { "who": "peer", "text": "so the relay only ever moves noise?" },
+      { "who": "you", "text": "that is the entire idea" }
+    ],
+    "cta": "Start chatting",
+    "ctaSecondary": "Read the code",
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "proof": {
+    "prompt": "ciphermesh --version",
+    "title": "Not a prototype",
+    "lead": "Every line below is checkable in the repository.",
+    "values": {
+      "version": "{version} — published on npm",
+      "tests": "{tests} passing, green on every push",
+      "commands": "{commands} in the client, {p2p} of them offline too",
+      "transport": "X25519 + ML-KEM-768, sealed sender, padded",
+      "license": "MIT — fork it, run it, read it"
+    }
+  },
+  "features": {
+    "prompt": "ciphermesh /help",
+    "title": "What you get",
+    "lead": "Every one of these is in the client today — not a roadmap.",
+    "items": {
+      "pq": {
+        "name": "Hybrid post-quantum",
+        "body": "X25519 plus ML-KEM-768, mixed into the ratchet root. Traffic recorded today stays unreadable to a future quantum computer, and security never drops below the classical construction."
+      },
+      "pfs": {
+        "name": "Perfect forward secrecy",
+        "body": "A Double Ratchet gives every single message its own key. Compromising a device today does not open yesterday's conversations."
+      },
+      "sealed": {
+        "name": "Sealed sender",
+        "body": "The relay does not even learn who sent a message. Add fixed-bucket padding and optional cover traffic and it cannot tell chatting from idle."
+      },
+      "rooms": {
+        "name": "Private rooms",
+        "body": "Password-protected rooms where the password never leaves your machine. The server stores only a verifier, in memory, and the room dies with its last member."
+      },
+      "buffers": {
+        "name": "Multi-room buffers",
+        "body": "Be in several rooms at once and switch with Alt+1..9. Which room a message belongs to travels inside the encrypted payload — the relay never learns it."
+      },
+      "p2p": {
+        "name": "Serverless P2P",
+        "body": "Drop the relay entirely: peers find each other over mDNS on the local network, with nearly the same command set."
+      }
+    }
+  },
+  "security": {
+    "prompt": "ciphermesh --threat-model",
+    "title": "What the operator can and cannot do",
+    "lead": "This is worth being blunt about, because it is the whole point of the design.",
+    "canTitle": "The operator can",
+    "cannotTitle": "The operator cannot",
+    "can": {
+      "route": "Route sealed envelopes between peers",
+      "limits": "Enforce connection and rate limits",
+      "ban": "Refuse connections from an address",
+      "offline": "Take the service offline"
+    },
+    "cannot": {
+      "read": "Read a single message",
+      "delete": "Delete a specific message",
+      "moderate": "Moderate a conversation",
+      "hand": "Hand over content that does not exist in readable form"
+    },
+    "footnote": "Rooms exist only while someone is inside them. When the last person leaves, the room and everything said in it are gone — there is nothing to hand over later."
+  },
+  "start": {
+    "prompt": "npx ciphermesh@latest",
+    "title": "Running in under a minute",
+    "lead": "No account, no signup, nothing to install permanently.",
+    "steps": {
+      "run": {
+        "name": "Run it",
+        "body": "Node 20 or newer is all you need."
+      },
+      "connect": {
+        "name": "Point it at a relay",
+        "body": "Type ciphermesh.de at the server prompt to use the public hub, or run your own with npx ciphermesh server."
+      },
+      "talk": {
+        "name": "Agree on a room",
+        "body": "Both of you type the same room name and you are talking. Add a password to make it private."
+      }
+    },
+    "demoAlt": "The CipherMesh client running in a terminal: a room list, an encrypted conversation and the command bar.",
+    "selfhost": "Prefer your own? The repository ships a Docker setup that gets a Let's Encrypt certificate automatically."
+  },
+  "community": {
+    "prompt": "ciphermesh --hub ciphermesh.de",
+    "title": "Now there is somewhere to meet",
+    "lead": "For a long time, using CipherMesh meant already knowing someone who ran a relay. That changed: ciphermesh.de is a public hub anyone can connect to, free, and it is where the project's community happens.",
+    "connectTitle": "Type this at the prompt",
+    "connectNote": "That is the whole join flow. The hub is always on, so there is no need to coordinate who starts the server.",
+    "items": {
+      "open": {
+        "name": "Rooms anyone can open",
+        "body": "Pick a name, tell the people you want in it, start talking. No account, no invitation, no waiting list."
+      },
+      "general": {
+        "name": "Everyone lands in general",
+        "body": "The default room is where to go if you just want to see who else is around. Say hello — it is the closest thing the project has to a front door."
+      },
+      "private": {
+        "name": "Private the moment you want it",
+        "body": "Add a password and the room is yours. The password never reaches the server, only a verifier it cannot reverse."
+      },
+      "ephemeral": {
+        "name": "Nothing outlives the conversation",
+        "body": "A room exists while someone is inside it. When the last person leaves it is gone — no history, no archive, nothing anyone could hand over."
+      }
+    },
+    "cta": "Hub terms of use",
+    "note": "Running the hub does not make its operator a reader. It is zero-knowledge like every other CipherMesh relay — the only difference is that this one is always on."
+  },
+  "verify": {
+    "prompt": "ciphermesh /verify",
+    "title": "Encryption is only half of it",
+    "lead": "Sealing a message protects it from the relay. It says nothing about who is holding the other key. CipherMesh makes that check something you can finish in about ten seconds.",
+    "outputLabel": "in the room",
+    "items": {
+      "sas": {
+        "name": "Compare thirteen digits",
+        "body": "Both sides derive the same short code from the two public keys. Read it out on a call or hold up the QR the client prints. If the codes match, nobody is standing in the middle."
+      },
+      "outofband": {
+        "name": "Never typed back",
+        "body": "The code is only ever compared by humans, on a channel that is not this one. There is nothing to enter, so there is nothing for an attacker to replay."
+      },
+      "tofu": {
+        "name": "The client remembers for you",
+        "body": "A peer's key is pinned the first time you see it. If it ever changes, you are warned before you type the next message — not after."
+      }
+    },
+    "note": "/fingerprint prints your own, /trustlist shows everyone you have confirmed. None of this is buried in a settings screen."
+  },
+  "controls": {
+    "prompt": "ciphermesh --panic",
+    "title": "The commands you hope never to need",
+    "lead": "Most of CipherMesh protects the conversation. This part protects the person holding the laptop.",
+    "items": {
+      "panic": {
+        "name": "Wipe everything, right now",
+        "body": "Session, history, trust store and keys are erased from disk and the client exits. There is no undo, and that is exactly the point."
+      },
+      "lock": {
+        "name": "Locks itself when you walk away",
+        "body": "The screen goes behind your passphrase after the idle time you set. Type /lock to do it immediately."
+      },
+      "ephemeral": {
+        "name": "Messages with an expiry date",
+        "body": "Set a lifetime and everything sent from then on disappears from both ends when it runs out."
+      },
+      "retention": {
+        "name": "Keep only what you meant to keep",
+        "body": "Anything older than the window you choose is wiped from disk. History exists at all only if you opened the session with a passphrase."
+      }
+    },
+    "note": "None of this needs a server's cooperation. Every one of these is your own client acting on your own machine."
+  },
+  "plugins": {
+    "prompt": "ciphermesh /plugins",
+    "title": "Any command you wish existed",
+    "lead": "A slash command the client does not recognise is handed to your plugins. A plugin is one small ES module in ~/.ciphermesh/plugins — that file is the entire API.",
+    "fileLabel": "~/.ciphermesh/plugins/roll.js",
+    "usageLabel": "then, in any room",
+    "items": {
+      "send": {
+        "name": "Answer straight into the room",
+        "body": "A handler that returns send posts its text into the room, through the same end-to-end encrypted path as anything you type. One that returns info shows it to you alone."
+      },
+      "offline": {
+        "name": "Runs peer-to-peer too",
+        "body": "The same file works in P2P mode, where there is no server involved at all. Nothing about a plugin depends on a relay."
+      },
+      "local": {
+        "name": "Nothing is ever downloaded",
+        "body": "CipherMesh does not sync, fetch or auto-update plugins. The only way code reaches that folder is you putting it there."
+      },
+      "warn": {
+        "name": "No sandbox — read it before you run it",
+        "body": "A plugin is arbitrary JavaScript inside your chat process, with access to your keys in memory. Treat a plugin file the way you treat curl | sh: install only what you wrote or read line by line."
+      }
+    },
+    "docs": "Read the plugin API"
+  },
+  "open": {
+    "prompt": "ciphermesh --license",
+    "title": "Free, and open all the way down",
+    "lead": "CipherMesh costs nothing and always will. The source is public under the MIT license — including the cryptography, which is exactly the part you should never have to take on faith.",
+    "auditTitle": "Read it yourself",
+    "auditBody": "Every claim on this page is checkable in the repository. The protocol and threat model are documented in full.",
+    "contributeTitle": "Bring an idea",
+    "contributeBody": "Found a bug, want a feature, disagree with a design decision? Open an issue. Pull requests are welcome too — the contributing guide covers the workflow.",
+    "issue": "Open an issue",
+    "repo": "Browse the source",
+    "docs": "Read the architecture"
+  },
+  "support": {
+    "prompt": "ciphermesh --thanks",
+    "title": "Support the project",
+    "lead": "CipherMesh is built and maintained in spare time, and the public hub runs on a server that costs real money every month. If it is useful to you, a coffee helps keep both going.",
+    "cta": "Buy me a coffee",
+    "note": "Entirely optional. Nothing in CipherMesh is paywalled, and nothing ever will be."
+  },
+  "notFound": {
+    "prompt": "cat this-page",
+    "code": "404",
+    "output": "no such file or directory",
+    "title": "That page is not here",
+    "body": "The path you asked for does not exist on this site. If a link brought you here, it was pointing at something that was never published.",
+    "home": "Back to the homepage",
+    "repo": "Browse the repository"
+  },
+  "error": {
+    "prompt": "ciphermesh --render",
+    "code": "500",
+    "output": "unhandled exception",
+    "title": "This page failed to render",
+    "body": "Something broke on this end, not yours. Reloading usually clears it. If it keeps happening, an issue with what you were doing is genuinely useful.",
+    "retry": "Try again",
+    "home": "Back to the homepage",
+    "issue": "Report it"
+  },
+  "footer": {
+    "tagline": "End-to-end encrypted terminal chat.",
+    "built": "Built by",
+    "source": "Source",
+    "npm": "npm",
+    "terms": "Hub terms",
+    "security": "Security policy",
+    "rights": "MIT licensed. Use it for good things."
+  }
+}

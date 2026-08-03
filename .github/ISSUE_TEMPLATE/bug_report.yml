@@ -1,0 +1,38 @@
+name: Bug report
+description: Something on the site is broken or wrong.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This tracker is for the **website**. For the chat client, use the
+        client repository instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens
+      description: What did you see, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to reproduce
+      placeholder: |
+        1. Open /en
+        2. Switch to PT
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Browser and OS
+      placeholder: Firefox 140 on Fedora 42
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Page or section
+      placeholder: /pt#community

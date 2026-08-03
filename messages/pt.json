@@ -1,0 +1,270 @@
+{
+  "meta": {
+    "title": "CipherMesh — chat de terminal com criptografia ponta-a-ponta",
+    "description": "Um chat de terminal onde a criptografia é o produto. O relay só enxerga ciphertext: não lê, não altera, não forja nada. Gratuito e de código aberto."
+  },
+  "nav": {
+    "what": "O que é",
+    "security": "Segurança",
+    "verify": "Verificação",
+    "start": "Começar",
+    "community": "Comunidade",
+    "controls": "Controles",
+    "plugins": "Plugins",
+    "open": "Código aberto",
+    "support": "Apoiar",
+    "github": "GitHub",
+    "sections": "Seções",
+    "menu": "Abrir menu",
+    "skipToContent": "Ir para o conteúdo",
+    "language": "Idioma"
+  },
+  "hero": {
+    "prompt": "cat o-que-o-servidor-ve",
+    "title": "O servidor não lê uma palavra.",
+    "lead": "O CipherMesh é um chat que vive no seu terminal. As mensagens são cifradas na sua máquina e decifradas na máquina de quem conversa com você. O relay no meio só encaminha envelopes lacrados — e não tem como abri-los.",
+    "youType": "O que você digita",
+    "youTypeMeta": "texto claro · nunca sai desta máquina",
+    "relaySees": "O que o relay guarda",
+    "relaySeesMeta": "128 B · remetente desconhecido · sala desconhecida",
+    "relayNote": "A mesma mensagem, dos dois lados. O envelope é preenchido até um tamanho fixo, então o comprimento dele não diz nada sobre o conteúdo — e ele não vai assinado, então o relay não sabe quem enviou.",
+    "transcript": [
+      { "who": "you", "text": "a chave nunca sai desta máquina" },
+      { "who": "peer", "text": "então o relay só transporta ruído?" },
+      { "who": "you", "text": "é exatamente essa a ideia" }
+    ],
+    "cta": "Começar a conversar",
+    "ctaSecondary": "Ver o código",
+    "copy": "Copiar",
+    "copied": "Copiado"
+  },
+  "proof": {
+    "prompt": "ciphermesh --version",
+    "title": "Não é protótipo",
+    "lead": "Cada linha abaixo dá para conferir no repositório.",
+    "values": {
+      "version": "{version} — publicado no npm",
+      "tests": "{tests} passando, verdes a cada push",
+      "commands": "{commands} no cliente, {p2p} deles também offline",
+      "transport": "X25519 + ML-KEM-768, sealed sender, com padding",
+      "license": "MIT — clone, rode, leia"
+    }
+  },
+  "features": {
+    "prompt": "ciphermesh /help",
+    "title": "O que você leva",
+    "lead": "Tudo isto já está no cliente hoje — não é roadmap.",
+    "items": {
+      "pq": {
+        "name": "Pós-quântico híbrido",
+        "body": "X25519 mais ML-KEM-768, misturados na raiz do ratchet. Tráfego gravado hoje continua ilegível para um computador quântico futuro, e a segurança nunca fica abaixo da construção clássica."
+      },
+      "pfs": {
+        "name": "Perfect forward secrecy",
+        "body": "Um Double Ratchet dá a cada mensagem uma chave só dela. Comprometer um dispositivo hoje não abre as conversas de ontem."
+      },
+      "sealed": {
+        "name": "Sealed sender",
+        "body": "O relay nem fica sabendo quem enviou a mensagem. Some a isso o padding em buckets fixos e o cover traffic opcional: ele não distingue conversa de silêncio."
+      },
+      "rooms": {
+        "name": "Salas privadas",
+        "body": "Salas com senha em que a senha nunca sai da sua máquina. O servidor guarda apenas um verificador, em memória, e a sala morre com a última pessoa."
+      },
+      "buffers": {
+        "name": "Buffers multi-sala",
+        "body": "Fique em várias salas ao mesmo tempo e alterne com Alt+1..9. A qual sala cada mensagem pertence viaja dentro do payload cifrado — o relay nunca fica sabendo."
+      },
+      "p2p": {
+        "name": "P2P sem servidor",
+        "body": "Dispense o relay: os peers se encontram por mDNS na rede local, com quase o mesmo conjunto de comandos."
+      }
+    }
+  },
+  "security": {
+    "prompt": "ciphermesh --threat-model",
+    "title": "O que quem hospeda pode e não pode fazer",
+    "lead": "Vale ser direto sobre isto, porque é a razão de ser do projeto.",
+    "canTitle": "Quem hospeda pode",
+    "cannotTitle": "Quem hospeda não pode",
+    "can": {
+      "route": "Encaminhar envelopes lacrados entre os peers",
+      "limits": "Aplicar limites de conexão e de taxa",
+      "ban": "Recusar conexões de um endereço",
+      "offline": "Tirar o serviço do ar"
+    },
+    "cannot": {
+      "read": "Ler uma única mensagem",
+      "delete": "Apagar uma mensagem específica",
+      "moderate": "Moderar uma conversa",
+      "hand": "Entregar conteúdo que não existe em forma legível"
+    },
+    "footnote": "As salas existem apenas enquanto alguém está dentro. Quando a última pessoa sai, a sala e tudo o que foi dito nela desaparecem — não há o que entregar depois."
+  },
+  "start": {
+    "prompt": "npx ciphermesh@latest",
+    "title": "Rodando em menos de um minuto",
+    "lead": "Sem conta, sem cadastro, sem instalar nada em definitivo.",
+    "steps": {
+      "run": {
+        "name": "Rode",
+        "body": "Node 20 ou mais novo é tudo de que você precisa."
+      },
+      "connect": {
+        "name": "Aponte para um relay",
+        "body": "Digite ciphermesh.de no prompt do servidor para usar o hub público, ou rode o seu com npx ciphermesh server."
+      },
+      "talk": {
+        "name": "Combinem uma sala",
+        "body": "Os dois digitam o mesmo nome de sala e pronto. Ponha uma senha para deixá-la privada."
+      }
+    },
+    "demoAlt": "O cliente do CipherMesh rodando num terminal: a lista de salas, uma conversa cifrada e a barra de comandos.",
+    "selfhost": "Prefere o seu próprio? O repositório traz um setup Docker que pega certificado Let's Encrypt automaticamente."
+  },
+  "community": {
+    "prompt": "ciphermesh --hub ciphermesh.de",
+    "title": "Agora existe um lugar para se encontrar",
+    "lead": "Durante muito tempo, usar o CipherMesh exigia já conhecer alguém que rodasse um relay. Isso mudou: ciphermesh.de é um hub público, gratuito, aberto a qualquer pessoa — e é ali que a comunidade do projeto acontece.",
+    "connectTitle": "Digite isto no prompt",
+    "connectNote": "É esse o fluxo inteiro de entrada. O hub fica sempre no ar, então ninguém precisa combinar quem vai subir o servidor.",
+    "items": {
+      "open": {
+        "name": "Salas que qualquer um abre",
+        "body": "Escolha um nome, avise quem você quer lá dentro e comece a conversar. Sem conta, sem convite, sem lista de espera."
+      },
+      "general": {
+        "name": "Todo mundo cai na general",
+        "body": "A sala padrão é para onde ir quando você só quer ver quem está por perto. Diga oi — é o que o projeto tem de mais parecido com uma porta de entrada."
+      },
+      "private": {
+        "name": "Privada na hora que você quiser",
+        "body": "Ponha uma senha e a sala é sua. A senha nunca chega ao servidor: ele guarda só um verificador que não dá para reverter."
+      },
+      "ephemeral": {
+        "name": "Nada sobrevive à conversa",
+        "body": "A sala existe enquanto alguém está dentro dela. Quando a última pessoa sai, acabou — sem histórico, sem arquivo, sem nada que alguém pudesse entregar."
+      }
+    },
+    "cta": "Termos de uso do hub",
+    "note": "Manter o hub não transforma quem o opera em leitor. Ele é zero-knowledge como qualquer outro relay do CipherMesh — a única diferença é que este fica sempre ligado."
+  },
+  "verify": {
+    "prompt": "ciphermesh /verify",
+    "title": "Cifrar é só metade",
+    "lead": "Lacrar a mensagem protege ela do relay. Não diz nada sobre quem está com a outra chave. O CipherMesh transforma essa conferência em algo que você termina em uns dez segundos.",
+    "outputLabel": "na sala",
+    "items": {
+      "sas": {
+        "name": "Confira treze dígitos",
+        "body": "Os dois lados derivam o mesmo código curto a partir das duas chaves públicas. Leia em voz alta numa ligação ou mostre o QR que o cliente imprime. Se os códigos batem, não tem ninguém no meio."
+      },
+      "outofband": {
+        "name": "Nunca digitado de volta",
+        "body": "O código só é comparado por gente, num canal que não é este. Não há nada para digitar, então não há nada que um atacante possa repetir."
+      },
+      "tofu": {
+        "name": "O cliente lembra por você",
+        "body": "A chave de um contato fica fixada na primeira vez que você a vê. Se ela mudar, você é avisado antes de digitar a próxima mensagem — não depois."
+      }
+    },
+    "note": "/fingerprint mostra a sua, /trustlist lista todo mundo que você já confirmou. Nada disso fica escondido numa tela de configurações."
+  },
+  "controls": {
+    "prompt": "ciphermesh --panic",
+    "title": "Os comandos que você espera nunca usar",
+    "lead": "Quase tudo no CipherMesh protege a conversa. Esta parte protege quem está com o notebook na mão.",
+    "items": {
+      "panic": {
+        "name": "Apaga tudo, agora",
+        "body": "Sessão, histórico, lista de confiança e chaves somem do disco e o cliente encerra. Não tem desfazer — e é justamente esse o ponto."
+      },
+      "lock": {
+        "name": "Tranca sozinho quando você sai",
+        "body": "A tela vai para trás da sua senha depois do tempo de inatividade que você definir. Digite /lock para trancar na hora."
+      },
+      "ephemeral": {
+        "name": "Mensagens com prazo de validade",
+        "body": "Defina uma duração e tudo que for enviado dali em diante some dos dois lados quando o tempo acaba."
+      },
+      "retention": {
+        "name": "Guarde só o que você quis guardar",
+        "body": "Tudo mais antigo que a janela que você escolher é apagado do disco. E o histórico só existe se você abriu a sessão com uma senha."
+      }
+    },
+    "note": "Nada disso depende da colaboração de um servidor. Cada um deles é o seu cliente agindo na sua máquina."
+  },
+  "plugins": {
+    "prompt": "ciphermesh /plugins",
+    "title": "Qualquer comando que você sentir falta",
+    "lead": "Todo comando com barra que o cliente não reconhece vai parar nos seus plugins. Um plugin é um módulo ES pequeno em ~/.ciphermesh/plugins — esse arquivo é a API inteira.",
+    "fileLabel": "~/.ciphermesh/plugins/roll.js",
+    "usageLabel": "depois, em qualquer sala",
+    "items": {
+      "send": {
+        "name": "Responde direto na sala",
+        "body": "Um handler que retorna send publica o texto na sala, pelo mesmo caminho cifrado ponta-a-ponta de qualquer mensagem sua. Um que retorna info mostra só para você."
+      },
+      "offline": {
+        "name": "Funciona em P2P também",
+        "body": "O mesmo arquivo roda no modo P2P, onde não há servidor nenhum envolvido. Nada num plugin depende de relay."
+      },
+      "local": {
+        "name": "Nada é baixado, nunca",
+        "body": "O CipherMesh não sincroniza, não busca e não atualiza plugins sozinho. O único jeito de código chegar nessa pasta é você colocar lá."
+      },
+      "warn": {
+        "name": "Sem sandbox — leia antes de rodar",
+        "body": "Um plugin é JavaScript arbitrário dentro do seu processo de chat, com acesso às suas chaves em memória. Trate um arquivo de plugin como você trata curl | sh: instale só o que você escreveu ou leu linha por linha."
+      }
+    },
+    "docs": "Ler a API de plugins"
+  },
+  "open": {
+    "prompt": "ciphermesh --license",
+    "title": "Gratuito, e aberto até o fim",
+    "lead": "O CipherMesh não custa nada e nunca vai custar. O código é público sob licença MIT — inclusive a criptografia, que é justamente a parte que você nunca deveria ter que aceitar por fé.",
+    "auditTitle": "Confira você mesmo",
+    "auditBody": "Toda afirmação desta página é verificável no repositório. O protocolo e o modelo de ameaças estão documentados por inteiro.",
+    "contributeTitle": "Traga uma ideia",
+    "contributeBody": "Achou um bug, quer uma funcionalidade, discorda de uma decisão de design? Abra uma issue. Pull requests também são bem-vindos — o guia de contribuição explica o fluxo.",
+    "issue": "Abrir uma issue",
+    "repo": "Ver o código",
+    "docs": "Ler a arquitetura"
+  },
+  "support": {
+    "prompt": "ciphermesh --thanks",
+    "title": "Apoie o projeto",
+    "lead": "O CipherMesh é feito e mantido em tempo livre, e o hub público roda num servidor que custa dinheiro de verdade todo mês. Se ele te for útil, um café ajuda a manter os dois de pé.",
+    "cta": "Me pague um café",
+    "note": "Totalmente opcional. Nada no CipherMesh fica atrás de paywall, e nunca vai ficar."
+  },
+  "notFound": {
+    "prompt": "cat esta-pagina",
+    "code": "404",
+    "output": "no such file or directory",
+    "title": "Essa página não está aqui",
+    "body": "O caminho que você pediu não existe neste site. Se um link te trouxe até aqui, ele apontava para algo que nunca foi publicado.",
+    "home": "Voltar para a página inicial",
+    "repo": "Ver o repositório"
+  },
+  "error": {
+    "prompt": "ciphermesh --render",
+    "code": "500",
+    "output": "unhandled exception",
+    "title": "Esta página falhou ao renderizar",
+    "body": "Algo quebrou deste lado, não do seu. Recarregar normalmente resolve. Se continuar acontecendo, abrir uma issue contando o que você estava fazendo ajuda de verdade.",
+    "retry": "Tentar de novo",
+    "home": "Voltar para a página inicial",
+    "issue": "Relatar"
+  },
+  "footer": {
+    "tagline": "Chat de terminal com criptografia ponta-a-ponta.",
+    "built": "Feito por",
+    "source": "Código",
+    "npm": "npm",
+    "terms": "Termos do hub",
+    "security": "Política de segurança",
+    "rights": "Licença MIT. Use para coisas boas."
+  }
+}
