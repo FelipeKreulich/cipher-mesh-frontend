@@ -1,7 +1,7 @@
 # Contributing
 
 Thanks for looking. This is the landing page for CipherMesh — bug reports about
-the *client* belong in
+the _client_ belong in
 [the client repository](https://github.com/FelipeKreulich/secret-chat-lan/issues).
 
 ## Language
@@ -9,15 +9,15 @@ the *client* belong in
 The project is public and aimed at an international audience, so anything a
 stranger might read is **English**:
 
-| Where                                | Language                            |
-| ------------------------------------ | ----------------------------------- |
-| Code, comments, identifiers          | **English**                         |
-| Issue titles and bodies              | **English**                         |
-| Pull request titles and bodies       | **English**                         |
-| `README.md`, this file               | **English**                         |
-| Commit messages                      | Portuguese (Conventional Commits)   |
-| `messages/en.json`                   | English                             |
-| `messages/pt.json`                   | Portuguese — keep in sync with `en` |
+| Where                          | Language                            |
+| ------------------------------ | ----------------------------------- |
+| Code, comments, identifiers    | **English**                         |
+| Issue titles and bodies        | **English**                         |
+| Pull request titles and bodies | **English**                         |
+| `README.md`, this file         | **English**                         |
+| Commit messages                | Portuguese (Conventional Commits)   |
+| `messages/en.json`             | English                             |
+| `messages/pt.json`             | Portuguese — keep in sync with `en` |
 
 Site copy is the exception: it exists in both, and a test fails if one file has a
 key the other does not.
