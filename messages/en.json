@@ -126,6 +126,10 @@
     "prompt": "ciphermesh --hub ciphermesh.de",
     "title": "Now there is somewhere to meet",
     "lead": "For a long time, using CipherMesh meant already knowing someone who ran a relay. That changed: ciphermesh.de is a public hub anyone can connect to, free, and it is where the project's community happens.",
+    "presence": {
+      "online": "{range} people in the hub right now",
+      "empty": "Nobody in the hub right now — be the first"
+    },
     "connectTitle": "Type this at the prompt",
     "connectNote": "That is the whole join flow. The hub is always on, so there is no need to coordinate who starts the server.",
     "items": {
