@@ -77,6 +77,39 @@ export function Community() {
         ))}
       </div>
 
+      {/* What the hub is for, and what it is not. Saying this plainly is the
+          only thing here that works without any code behind it: a service with
+          no declared purpose reads as general-purpose infrastructure, and
+          self-hosting is the honest answer for anyone who needs more than a
+          meeting point. */}
+      <div className="mt-10 grid gap-px overflow-hidden rounded-sm border border-line bg-line md:grid-cols-2">
+        <Reveal className="h-full bg-panel p-6 sm:p-7">
+          <h3 className="font-display text-base tracking-tight text-ink">
+            {t("purposeTitle")}
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-dim">
+            {t("purposeBody")}
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.08} className="h-full bg-panel p-6 sm:p-7">
+          <h3 className="font-display text-base tracking-tight text-ink">
+            {t("selfhostTitle")}
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-dim">
+            {t("selfhostBody")}
+          </p>
+          <a
+            href={site.selfhostDocs}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="mt-4 inline-flex font-mono text-xs text-wire underline underline-offset-4 transition-colors hover:text-ink"
+          >
+            {t("selfhostCta")}
+          </a>
+        </Reveal>
+      </div>
+
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-2xl text-sm text-faint">{t("note")}</p>
         <Button
