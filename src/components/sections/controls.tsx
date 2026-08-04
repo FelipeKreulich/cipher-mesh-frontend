@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 
+import { DissolveOnHover } from "@/components/site/dissolve-on-hover";
 import { Reveal } from "@/components/site/reveal";
 import { Section } from "@/components/site/section";
 
@@ -25,24 +26,41 @@ export function Controls() {
       lead={t("lead")}
     >
       <div className="grid gap-px overflow-hidden rounded-sm border border-line bg-line sm:grid-cols-2">
-        {ITEMS.map((item, index) => (
-          <Reveal
-            key={item.key}
-            delay={index * 0.05}
-            className="h-full bg-panel p-6 sm:p-7"
-          >
-            <code className="block font-mono text-sm text-wire">
-              <span className="text-signal-soft select-none">› </span>
-              {item.cmd}
-            </code>
-            <h3 className="mt-3 font-display text-base tracking-tight text-ink">
-              {t(`items.${item.key}.name`)}
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-dim">
-              {t(`items.${item.key}.body`)}
-            </p>
-          </Reveal>
-        ))}
+        {ITEMS.map((item, index) => {
+          const body = (
+            <>
+              <code className="block font-mono text-sm text-wire">
+                <span className="text-signal-soft select-none">› </span>
+                {item.cmd}
+              </code>
+              <h3 className="mt-3 font-display text-base tracking-tight text-ink">
+                {t(`items.${item.key}.name`)}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-dim">
+                {t(`items.${item.key}.body`)}
+              </p>
+            </>
+          );
+
+          return (
+            <Reveal
+              key={item.key}
+              delay={index * 0.05}
+              className="h-full bg-panel"
+            >
+              {/* Only /panic comes apart. It is the one command here that
+                  destroys something, and an effect on all four would be
+                  decoration rather than a warning. */}
+              {item.key === "panic" ? (
+                <DissolveOnHover className="h-full p-6 sm:p-7">
+                  {body}
+                </DissolveOnHover>
+              ) : (
+                <div className="h-full p-6 sm:p-7">{body}</div>
+              )}
+            </Reveal>
+          );
+        })}
       </div>
 
       <p className="mt-6 max-w-2xl text-sm text-faint">{t("note")}</p>
