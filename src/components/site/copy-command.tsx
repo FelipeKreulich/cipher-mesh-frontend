@@ -48,13 +48,18 @@ export function CopyCommand({
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
     >
-      {/* Behind the panel, and larger than it on every side. The panel stays
-          opaque, so the flames only show where they lick past its edges — which
-          keeps the command readable while it burns. */}
-      <PixelFire
-        intensity={intensity}
-        className="pointer-events-none absolute -inset-x-6 -top-12 -bottom-3 z-0"
-      />
+      {/* One band wider than the panel on every side. Each edge burns outwards
+          into its own band, so the flames stay inside this box and cannot climb
+          over the paragraph above.
+
+          The inset pairs with BAND in pixel-fire.tsx — change one, change both.
+
+          The canvas needs a plain div to stretch for it: a canvas is a replaced
+          element, so `inset` alone leaves it at its intrinsic size, tucked into
+          the corner. */}
+      <div className="pointer-events-none absolute -inset-4 z-0">
+        <PixelFire intensity={intensity} className="h-full w-full" />
+      </div>
 
       <div className="relative z-10 flex items-center gap-3 rounded-sm border border-line bg-panel px-3 py-2.5 sm:px-4">
         <code className="flex-1 overflow-x-auto font-mono text-sm whitespace-nowrap text-ink">
