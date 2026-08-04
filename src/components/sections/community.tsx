@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 
+import { NeonCard } from "@/components/site/neon-card";
 import { Presence } from "@/components/site/presence";
 import { Reveal } from "@/components/site/reveal";
 import { Section } from "@/components/site/section";
@@ -75,6 +76,36 @@ export function Community() {
             </p>
           </Reveal>
         ))}
+      </div>
+
+      {/* What the hub is for, and what it is not. A service with no declared
+          purpose reads as general-purpose infrastructure, and self-hosting is
+          the honest answer for anyone who needs more than a meeting point.
+
+          Cyan for the hub, violet for a relay of your own — the site's own
+          meaning for those two colours, doing the work before the headings
+          do. */}
+      <div className="mt-10 grid gap-px overflow-hidden rounded-sm border border-line bg-line md:grid-cols-2">
+        <NeonCard tone="wire" tag={site.hub} title={t("purposeTitle")}>
+          {t("purposeBody")}
+        </NeonCard>
+
+        <NeonCard
+          tone="signal"
+          tag="npx ciphermesh server"
+          title={t("selfhostTitle")}
+          delay={0.08}
+        >
+          <p>{t("selfhostBody")}</p>
+          <a
+            href={site.selfhostDocs}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="mt-4 inline-flex font-mono text-xs text-signal-soft underline underline-offset-4 transition-colors hover:text-ink"
+          >
+            {t("selfhostCta")}
+          </a>
+        </NeonCard>
       </div>
 
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

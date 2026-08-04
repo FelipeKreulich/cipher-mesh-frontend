@@ -14,6 +14,7 @@ export const site = {
   npm: "https://www.npmjs.com/package/ciphermesh",
   docs: `${REPO}/blob/master/docs/ARCHITECTURE.md`,
   pluginDocs: `${REPO}/blob/master/docs/PLUGINS.md`,
+  selfhostDocs: `${REPO}/blob/master/deploy/README.md`,
   contributing: `${REPO}/blob/master/CONTRIBUTING.md`,
   terms: `${REPO}/blob/master/TERMS.md`,
   security: `${REPO}/blob/master/SECURITY.md`,

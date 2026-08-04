@@ -171,6 +171,11 @@
         "body": "A sala existe enquanto lá estiver alguém. Quando a última pessoa sai, acabou — sem histórico, sem arquivo, sem nada que alguém pudesse entregar."
       }
     },
+    "purposeTitle": "Para que ele existe",
+    "purposeBody": "O hub é um ponto de encontro: serve para experimentares o CipherMesh e encontrares outras pessoas sem teres de subir um servidor primeiro. Não é um serviço de comunicação de uso geral — as salas não são casa de ninguém, não há contas, e nada fica entre sessões.",
+    "selfhostTitle": "Se precisas de mais, o relay é teu",
+    "selfhostBody": "Um relay que tu alojas responde a ti, não depende da disponibilidade de mais ninguém, e não faz as tuas conversas passarem por uma máquina administrada por um estranho. O repositório traz a configuração Docker pronta. Para o que é importante, é a melhor resposta — e é aquela para que o software foi feito.",
+    "selfhostCta": "Alojar o meu relay",
     "cta": "Termos de utilização do hub",
     "note": "Manter o hub não transforma quem o opera em leitor. É zero-knowledge como qualquer outro relay do CipherMesh — a única diferença é que este nunca dorme."
   },
