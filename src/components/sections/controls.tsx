@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { DissolveOnHover } from "@/components/site/dissolve-on-hover";
 import { Reveal } from "@/components/site/reveal";
 import { Section } from "@/components/site/section";
+import { cn } from "@/lib/utils";
 
 /**
  * The command is the label here — these are things you type in a hurry, and
@@ -27,10 +28,23 @@ export function Controls() {
     >
       <div className="grid gap-px overflow-hidden rounded-sm border border-line bg-line sm:grid-cols-2">
         {ITEMS.map((item, index) => {
+          const danger = item.key === "panic";
           const body = (
             <>
-              <code className="block font-mono text-sm text-wire">
-                <span className="text-signal-soft select-none">› </span>
+              <code
+                className={cn(
+                  "block font-mono text-sm",
+                  danger ? "text-danger" : "text-wire",
+                )}
+              >
+                <span
+                  className={cn(
+                    "select-none",
+                    danger ? "text-danger/70" : "text-signal-soft",
+                  )}
+                >
+                  ›{" "}
+                </span>
                 {item.cmd}
               </code>
               <h3 className="mt-3 font-display text-base tracking-tight text-ink">
@@ -46,12 +60,20 @@ export function Controls() {
             <Reveal
               key={item.key}
               delay={index * 0.05}
-              className="h-full bg-panel"
+              className={cn(
+                "relative h-full bg-panel",
+                // A neon rail on the one card that destroys something, so it
+                // reads as different before you get to the words. The ring is
+                // inset and the glow is a shadow, so neither disturbs the
+                // one-pixel grid the four cards sit in.
+                danger &&
+                  "shadow-[0_0_30px_-6px_rgba(255,51,85,0.5),inset_0_0_20px_-12px_rgba(255,51,85,0.9)] ring-1 ring-danger/55 ring-inset",
+              )}
             >
               {/* Only /panic comes apart. It is the one command here that
                   destroys something, and an effect on all four would be
                   decoration rather than a warning. */}
-              {item.key === "panic" ? (
+              {danger ? (
                 <DissolveOnHover className="h-full p-6 sm:p-7">
                   {body}
                 </DissolveOnHover>

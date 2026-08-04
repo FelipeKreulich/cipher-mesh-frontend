@@ -23,10 +23,11 @@ const MAX = 0.46;
 
 /** Where the page shows through: the panel's own colour. */
 const HOLE = [14, 14, 22];
+/** Red, matching the neon rail on the card: this is destruction, not brand. */
 const EMBER = [
-  [123, 45, 255],
-  [160, 107, 255],
-  [201, 155, 255],
+  [255, 51, 85],
+  [255, 108, 132],
+  [255, 170, 186],
 ];
 
 type PixelDissolveProps = {
