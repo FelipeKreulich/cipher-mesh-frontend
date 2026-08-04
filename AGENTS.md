@@ -27,6 +27,11 @@ exception is product UI — the client's own prompts (`Server`, `Room`, `/join`,
 `/verify`) stay English everywhere, because the client has no i18n layer. Add a
 key to one locale and you add it to the other; a test enforces it.
 
+**The Portuguese is European.** `messages/pt.json` uses "tu" forms and
+European vocabulary — ecrã, ficheiro, palavra-passe, ligação, correr, a correr.
+Not "você", "tela", "arquivo", "senha", "rodando". The URL stays `/pt` but the
+document declares `lang="pt-PT"`.
+
 **Braces are ICU syntax.** `{ send }` sitting in prose is read as a variable and
 throws at render time. Rewrite the sentence rather than escaping it. A test
 guards this, with an allowlist of the placeholders that are real (`version`,
