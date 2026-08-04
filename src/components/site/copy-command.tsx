@@ -3,6 +3,7 @@
 import { Check, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { PixelFire } from "@/components/site/pixel-fire";
 import { cn } from "@/lib/utils";
 
 type CopyCommandProps = {
@@ -19,6 +20,7 @@ export function CopyCommand({
   className,
 }: CopyCommandProps) {
   const [copied, setCopied] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
     if (!copied) return;
@@ -35,6 +37,11 @@ export function CopyCommand({
     }
   };
 
+  // Copying the command is the one thing this page is really asking for, so it
+  // gets the reward. Hovering only hints that something is there; a button
+  // burning permanently would fight the headline for attention.
+  const intensity = copied ? 1 : hovered ? 0.42 : 0;
+
   return (
     <div
       className={cn(
@@ -46,21 +53,39 @@ export function CopyCommand({
         <span className="text-signal-soft select-none">$ </span>
         {command}
       </code>
-      <button
-        type="button"
-        onClick={copy}
-        aria-label={copied ? copiedLabel : copyLabel}
-        className="flex h-7 shrink-0 items-center gap-1.5 rounded-sm border border-line px-2 font-mono text-xs text-faint transition-colors hover:border-wire/40 hover:text-wire"
-      >
-        {copied ? (
-          <Check className="size-3.5" aria-hidden="true" />
-        ) : (
-          <Copy className="size-3.5" aria-hidden="true" />
-        )}
-        <span className="hidden sm:inline">
-          {copied ? copiedLabel : copyLabel}
-        </span>
-      </button>
+
+      <div className="relative shrink-0">
+        {/* Taller than the button and pinned to its base: the flame rises out
+            of it. pointer-events-none keeps the click on the button. */}
+        <PixelFire
+          intensity={intensity}
+          className="pointer-events-none absolute -inset-x-3 -top-8 bottom-0 h-[calc(100%+2rem)] w-[calc(100%+1.5rem)]"
+        />
+        <button
+          type="button"
+          onClick={copy}
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+          onFocus={() => setHovered(true)}
+          onBlur={() => setHovered(false)}
+          aria-label={copied ? copiedLabel : copyLabel}
+          className={cn(
+            "relative flex h-7 shrink-0 items-center gap-1.5 rounded-sm border px-2 font-mono text-xs transition-colors",
+            copied
+              ? "border-signal/50 bg-panel text-signal-soft"
+              : "border-line bg-panel text-faint hover:border-wire/40 hover:text-wire",
+          )}
+        >
+          {copied ? (
+            <Check className="size-3.5" aria-hidden="true" />
+          ) : (
+            <Copy className="size-3.5" aria-hidden="true" />
+          )}
+          <span className="hidden sm:inline">
+            {copied ? copiedLabel : copyLabel}
+          </span>
+        </button>
+      </div>
     </div>
   );
 }
