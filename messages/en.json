@@ -150,6 +150,11 @@
         "body": "A room exists while someone is inside it. When the last person leaves it is gone — no history, no archive, nothing anyone could hand over."
       }
     },
+    "purposeTitle": "What it is for",
+    "purposeBody": "The hub is a meeting point: it exists so you can try CipherMesh and find other people using it without running a server first. It is not a general-purpose communications service — rooms are nobody's home, there are no accounts, and nothing is kept between sessions.",
+    "selfhostTitle": "Need more? Then the relay should be yours",
+    "selfhostBody": "A relay you host answers to you, depends on nobody else's uptime, and does not put your conversations through a machine a stranger administers. The repository ships the Docker setup ready to go. For anything that matters it is the better answer — and it is the one the software was built for.",
+    "selfhostCta": "Host your own relay",
     "cta": "Hub terms of use",
     "note": "Running the hub does not make its operator a reader. It is zero-knowledge like every other CipherMesh relay — the only difference is that this one is always on."
   },
