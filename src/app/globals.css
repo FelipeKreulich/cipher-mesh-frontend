@@ -25,6 +25,10 @@
   --color-signal-soft: #a06bff;
   --color-wire: #4cc9f0;
   --color-warn: #e8a33d;
+  /* Semantic, not a fourth accent: the colour of something being destroyed.
+     Used in one place — the /panic card, which wipes everything with no undo
+     — so that card reads as different before you even get to the words. */
+  --color-danger: #ff3355;
 
   --font-display: var(--font-martian), ui-monospace, monospace;
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;

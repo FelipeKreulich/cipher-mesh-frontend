@@ -19,19 +19,38 @@ import { useEffect, useRef } from "react";
  * The palette is the site's violet, not a new colour: heat runs from the
  * background through signal to near-white at the source.
  */
-const RAMP = [
-  [0, 0, 0, 0],
-  [26, 8, 54, 90],
-  [52, 14, 108, 140],
-  [78, 22, 158, 180],
-  [104, 30, 208, 205],
-  [123, 45, 255, 225],
-  [150, 82, 255, 235],
-  [176, 118, 255, 245],
-  [201, 155, 255, 250],
-  [224, 195, 255, 252],
-  [244, 234, 255, 255],
-];
+const RAMPS = {
+  /** The site's violet. Anything the visitor holds. */
+  signal: [
+    [0, 0, 0, 0],
+    [26, 8, 54, 90],
+    [52, 14, 108, 140],
+    [78, 22, 158, 180],
+    [104, 30, 208, 205],
+    [123, 45, 255, 225],
+    [150, 82, 255, 235],
+    [176, 118, 255, 245],
+    [201, 155, 255, 250],
+    [224, 195, 255, 252],
+    [244, 234, 255, 255],
+  ],
+  /** The amber the site reserves for warnings — used on the error pages. */
+  warn: [
+    [0, 0, 0, 0],
+    [46, 22, 6, 90],
+    [88, 44, 10, 140],
+    [128, 66, 14, 180],
+    [168, 92, 20, 205],
+    [232, 163, 61, 225],
+    [240, 182, 92, 235],
+    [246, 202, 130, 245],
+    [250, 220, 168, 250],
+    [252, 236, 208, 252],
+    [255, 249, 240, 255],
+  ],
+} as const;
+
+type Tone = keyof typeof RAMPS;
 
 /** Side of one fire pixel, in CSS pixels. Square pixels are the whole look. */
 const PIXEL = 4;
@@ -71,7 +90,11 @@ function makeStrip(cols: number, rows: number): Strip | null {
   };
 }
 
-function burn(strip: Strip, source: number) {
+function burn(
+  strip: Strip,
+  source: number,
+  ramp: readonly (readonly number[])[],
+) {
   const { cols, rows, heat } = strip;
 
   // Source row sits at the bottom of the strip, which after rotation is the
@@ -97,7 +120,7 @@ function burn(strip: Strip, source: number) {
 
   const data = strip.image.data;
   for (let i = 0; i < heat.length; i += 1) {
-    const [r, g, b, a] = RAMP[Math.min(heat[i], RAMP.length - 1)];
+    const [r, g, b, a] = ramp[Math.min(heat[i], ramp.length - 1)];
     const o = i * 4;
     data[o] = r;
     data[o + 1] = g;
@@ -110,10 +133,16 @@ function burn(strip: Strip, source: number) {
 type PixelFireProps = {
   /** How hard it burns: 0 puts it out, 1 is a full flame. */
   intensity: number;
+  /** Violet by default; amber is reserved for the error pages. */
+  tone?: Tone;
   className?: string;
 };
 
-export function PixelFire({ intensity, className }: PixelFireProps) {
+export function PixelFire({
+  intensity,
+  tone = "signal",
+  className,
+}: PixelFireProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const target = useRef(intensity);
   // The loop stops itself once the last ember is out, so relighting needs a
@@ -128,6 +157,7 @@ export function PixelFire({ intensity, className }: PixelFireProps) {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
+    const ramp = RAMPS[tone];
     const band = Math.round(BAND / PIXEL);
     let inner = { w: 0, h: 0 };
     let horizontal: Strip | null = null;
@@ -187,10 +217,10 @@ export function PixelFire({ intensity, className }: PixelFireProps) {
 
       // Eased, so the flame catches and dies down instead of snapping.
       level += (target.current - level) * 0.18;
-      const source = Math.round(level * (RAMP.length - 1));
+      const source = Math.round(level * (ramp.length - 1));
 
-      burn(horizontal, source);
-      burn(vertical, source);
+      burn(horizontal, source, ramp);
+      burn(vertical, source, ramp);
       draw();
 
       // Once the last ember is out there is nothing left to animate. Stopping
@@ -239,7 +269,7 @@ export function PixelFire({ intensity, className }: PixelFireProps) {
       observer.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, []);
+  }, [tone]);
 
   // The loop reads the target every frame rather than restarting on each
   // change, so the flame eases between levels instead of snapping.
