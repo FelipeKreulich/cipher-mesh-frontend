@@ -46,6 +46,41 @@ describe("PixelFire", () => {
       "true",
     );
   });
+
+  it("sets up and tears down cleanly when motion is allowed", () => {
+    // Every other test runs the reduced-motion path, which returns before any
+    // of the fire code executes. Without this one, the animation itself is
+    // never exercised and could throw in a browser while CI stays green.
+    reducedMotion(false);
+
+    const observe = vi.fn();
+    const disconnect = vi.fn();
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        observe = observe;
+        unobserve = vi.fn();
+        disconnect = disconnect;
+      },
+    );
+
+    const putImageData = vi.fn();
+    HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
+      createImageData: (w: number, h: number) => ({
+        data: new Uint8ClampedArray(w * h * 4),
+        width: w,
+        height: h,
+      }),
+      putImageData,
+      clearRect: vi.fn(),
+    })) as unknown as HTMLCanvasElement["getContext"];
+
+    const { unmount } = render(<PixelFire intensity={1} />);
+
+    expect(observe).toHaveBeenCalled();
+    expect(() => unmount()).not.toThrow();
+    expect(disconnect).toHaveBeenCalled();
+  });
 });
 
 describe("CopyCommand with fire", () => {

@@ -38,42 +38,40 @@ export function CopyCommand({
   };
 
   // Copying the command is the one thing this page is really asking for, so it
-  // gets the reward. Hovering only hints that something is there; a button
-  // burning permanently would fight the headline for attention.
+  // gets the reward. Hovering only hints that something is there; a box burning
+  // permanently would fight the headline for attention.
   const intensity = copied ? 1 : hovered ? 0.42 : 0;
 
   return (
     <div
-      className={cn(
-        "flex items-center gap-3 rounded-sm border border-line bg-panel px-3 py-2.5 sm:px-4",
-        className,
-      )}
+      className={cn("relative isolate", className)}
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
     >
-      <code className="flex-1 overflow-x-auto font-mono text-sm whitespace-nowrap text-ink">
-        <span className="text-signal-soft select-none">$ </span>
-        {command}
-      </code>
+      {/* Behind the panel, and larger than it on every side. The panel stays
+          opaque, so the flames only show where they lick past its edges — which
+          keeps the command readable while it burns. */}
+      <PixelFire
+        intensity={intensity}
+        className="pointer-events-none absolute -inset-x-6 -top-12 -bottom-3 z-0"
+      />
 
-      <div className="relative shrink-0">
-        {/* Taller than the button and pinned to its base: the flame rises out
-            of it. pointer-events-none keeps the click on the button. */}
-        <PixelFire
-          intensity={intensity}
-          className="pointer-events-none absolute -inset-x-3 -top-8 bottom-0 h-[calc(100%+2rem)] w-[calc(100%+1.5rem)]"
-        />
+      <div className="relative z-10 flex items-center gap-3 rounded-sm border border-line bg-panel px-3 py-2.5 sm:px-4">
+        <code className="flex-1 overflow-x-auto font-mono text-sm whitespace-nowrap text-ink">
+          <span className="text-signal-soft select-none">$ </span>
+          {command}
+        </code>
         <button
           type="button"
           onClick={copy}
-          onPointerEnter={() => setHovered(true)}
-          onPointerLeave={() => setHovered(false)}
           onFocus={() => setHovered(true)}
           onBlur={() => setHovered(false)}
           aria-label={copied ? copiedLabel : copyLabel}
           className={cn(
-            "relative flex h-7 shrink-0 items-center gap-1.5 rounded-sm border px-2 font-mono text-xs transition-colors",
+            "flex h-7 shrink-0 items-center gap-1.5 rounded-sm border px-2 font-mono text-xs transition-colors",
             copied
-              ? "border-signal/50 bg-panel text-signal-soft"
-              : "border-line bg-panel text-faint hover:border-wire/40 hover:text-wire",
+              ? "border-signal/50 text-signal-soft"
+              : "border-line text-faint hover:border-wire/40 hover:text-wire",
           )}
         >
           {copied ? (

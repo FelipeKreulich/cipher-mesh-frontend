@@ -29,8 +29,12 @@ const RAMP = [
   [244, 234, 255, 255],
 ];
 
-const COLS = 56;
-const ROWS = 26;
+/**
+ * Side of one fire pixel in CSS pixels. The grid is derived from the element's
+ * real size rather than fixed, so a wide box does not stretch the pixels into
+ * rectangles — square pixels are most of what makes this read as pixel art.
+ */
+const PIXEL = 8;
 const FRAME_MS = 45;
 
 type PixelFireProps = {
@@ -54,34 +58,45 @@ export function PixelFire({ intensity, className }: PixelFireProps) {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    canvas.width = COLS;
-    canvas.height = ROWS;
+    let cols = 0;
+    let rows = 0;
+    let heat = new Uint8Array(0);
+    let image: ImageData | null = null;
 
-    const heat = new Uint8Array(COLS * ROWS);
-    const image = ctx.createImageData(COLS, ROWS);
+    const resize = () => {
+      const nextCols = Math.max(8, Math.round(canvas.clientWidth / PIXEL));
+      const nextRows = Math.max(6, Math.round(canvas.clientHeight / PIXEL));
+      if (nextCols === cols && nextRows === rows) return;
+      cols = nextCols;
+      rows = nextRows;
+      canvas.width = cols;
+      canvas.height = rows;
+      heat = new Uint8Array(cols * rows);
+      image = ctx.createImageData(cols, rows);
+    };
 
-    // Eased so the flame catches and dies down instead of snapping.
     let level = 0;
     let frame = 0;
     let last = 0;
 
     const spread = () => {
-      for (let y = ROWS - 1; y > 0; y -= 1) {
-        for (let x = 0; x < COLS; x += 1) {
-          const below = heat[y * COLS + x];
+      for (let y = rows - 1; y > 0; y -= 1) {
+        for (let x = 0; x < cols; x += 1) {
+          const below = heat[y * cols + x];
           if (below === 0) {
-            heat[(y - 1) * COLS + x] = 0;
+            heat[(y - 1) * cols + x] = 0;
             continue;
           }
           const decay = Math.floor(Math.random() * 3);
-          const drift = (Math.floor(Math.random() * 3) - 1 + COLS) % COLS;
-          const to = (y - 1) * COLS + ((x + drift - 1 + COLS) % COLS);
+          const drift = Math.floor(Math.random() * 3);
+          const to = (y - 1) * cols + ((x + drift - 1 + cols) % cols);
           heat[to] = Math.max(0, below - decay);
         }
       }
     };
 
     const paint = () => {
+      if (!image) return;
       const data = image.data;
       for (let i = 0; i < heat.length; i += 1) {
         const [r, g, b, a] = RAMP[Math.min(heat[i], RAMP.length - 1)];
@@ -99,26 +114,27 @@ export function PixelFire({ intensity, className }: PixelFireProps) {
       if (now - last < FRAME_MS) return;
       last = now;
 
+      resize();
+      if (!heat.length) return;
+
+      // Eased, so the flame catches and dies down instead of snapping.
       level += (target.current - level) * 0.18;
 
-      // The source row. Below a whisper of heat it is cheaper and cleaner to
-      // stop entirely than to keep redrawing an invisible flame.
       const source = Math.round(level * (RAMP.length - 1));
-      for (let x = 0; x < COLS; x += 1) {
-        heat[(ROWS - 1) * COLS + x] =
+      for (let x = 0; x < cols; x += 1) {
+        heat[(rows - 1) * cols + x] =
           source > 0 && Math.random() > 0.08 ? source : 0;
       }
 
       spread();
       paint();
 
-      if (level < 0.01 && source === 0) {
-        const empty = heat.every((v) => v === 0);
-        if (empty) {
-          cancelAnimationFrame(frame);
-          frame = 0;
-          ctx.clearRect(0, 0, COLS, ROWS);
-        }
+      // Once the last ember is out there is nothing left to animate. Stopping
+      // beats redrawing an invisible flame on every frame of every page view.
+      if (source === 0 && level < 0.01 && heat.every((v) => v === 0)) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        ctx.clearRect(0, 0, cols, rows);
       }
     };
 
@@ -127,7 +143,14 @@ export function PixelFire({ intensity, className }: PixelFireProps) {
     };
 
     relight.current = start;
+    resize();
     start();
+
+    const observer = new ResizeObserver(() => {
+      resize();
+      if (target.current > 0) start();
+    });
+    observer.observe(canvas);
 
     const onVisibility = () => {
       if (document.hidden && frame) {
@@ -144,6 +167,7 @@ export function PixelFire({ intensity, className }: PixelFireProps) {
       if (frame) cancelAnimationFrame(frame);
       frame = 0;
       relight.current = () => {};
+      observer.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
