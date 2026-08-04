@@ -37,6 +37,14 @@ const plexSans = IBM_Plex_Sans({
   display: "swap",
 });
 
+/**
+ * The URL keeps the short code, but the document declares the variant it is
+ * actually written in. The Portuguese here is European — "tu" forms, "ecrã",
+ * "ficheiro", "palavra-passe" — and a screen reader pronouncing it as Brazilian
+ * gets the vowels wrong.
+ */
+const HTML_LANG: Record<string, string> = { pt: "pt-PT" };
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -89,7 +97,7 @@ export default async function LocaleLayout({
 
   return (
     <html
-      lang={locale}
+      lang={HTML_LANG[locale] ?? locale}
       className={`dark ${martian.variable} ${plexMono.variable} ${plexSans.variable}`}
       suppressHydrationWarning
     >
