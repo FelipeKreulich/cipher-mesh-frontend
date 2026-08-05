@@ -1,7 +1,7 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 import { Reveal } from "@/components/site/reveal";
-import { stats } from "@/lib/site";
+import { npmVersion, stats } from "@/lib/site";
 
 const ROWS = ["version", "tests", "commands", "transport", "license"] as const;
 
@@ -9,8 +9,10 @@ const ROWS = ["version", "tests", "commands", "transport", "license"] as const;
  * The claims arrive the way the CLI would print them: aligned key/value pairs,
  * not stat cards. It is the same grammar as the rest of the page.
  */
-export function Proof() {
-  const t = useTranslations("proof");
+export async function Proof() {
+  const t = await getTranslations("proof");
+  // Read live, so a release never leaves the page claiming an old version.
+  const version = await npmVersion();
 
   return (
     <section id="proof" className="relative scroll-mt-20 py-16 sm:py-20">
@@ -24,7 +26,7 @@ export function Proof() {
                   <dt className="w-24 shrink-0 text-faint sm:w-28">{row}</dt>
                   <dd className="text-dim">
                     {t(`values.${row}`, {
-                      version: stats.version,
+                      version,
                       tests: stats.tests,
                       commands: stats.commands,
                       p2p: stats.p2pCommands,
