@@ -6,6 +6,10 @@ name: Docker (GHCR)
 on:
   push:
     branches: [master]
+  # GitHub occasionally drops a push event, and when it does there is no way to
+  # publish without an empty commit. This makes a missed deploy recoverable from
+  # the Actions tab.
+  workflow_dispatch:
 
 permissions:
   contents: read
