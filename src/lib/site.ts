@@ -31,7 +31,7 @@ export const stats = {
   version: "2.8.0",
   tests: 443,
   commands: 66,
-  p2pCommands: 60,
+  p2pCommands: 63,
 } as const;
 
 /**
