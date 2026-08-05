@@ -190,10 +190,14 @@ export function CipherMesh3D({ className }: { className?: string }) {
     };
 
     let frame = 0;
-    const clock = new THREE.Clock();
+    // Timer, not Clock: Clock is deprecated in three, and Timer has to be
+    // stepped explicitly — which is the point, since it lets getElapsed() be
+    // read more than once a frame without the value drifting.
+    const timer = new THREE.Timer();
 
-    const draw = () => {
-      const t = clock.getElapsedTime();
+    const draw = (now?: number) => {
+      timer.update(now);
+      const t = timer.getElapsed();
 
       world.rotation.y = t * 0.055 + pointer.x * 0.22;
       world.rotation.x = Math.sin(t * 0.16) * 0.12 + pointer.y * 0.16;
@@ -209,9 +213,9 @@ export function CipherMesh3D({ className }: { className?: string }) {
       composer.render();
     };
 
-    const loop = () => {
+    const loop = (now: number) => {
       frame = requestAnimationFrame(loop);
-      draw();
+      draw(now);
     };
 
     if (reduce) {

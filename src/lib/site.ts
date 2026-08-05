@@ -1,3 +1,4 @@
+const PACKAGE = "ciphermesh";
 const REPO = "https://github.com/FelipeKreulich/secret-chat-lan";
 
 export const site = {
@@ -26,8 +27,33 @@ export const site = {
  * repository, so they only move when the repository does.
  */
 export const stats = {
-  version: "2.6.0",
-  tests: 418,
-  commands: 64,
-  p2pCommands: 61,
+  /** Fallback only. The live value comes from npm — see npmVersion(). */
+  version: "2.8.0",
+  tests: 443,
+  commands: 66,
+  p2pCommands: 63,
 } as const;
+
+/**
+ * The published version, read from npm rather than kept here.
+ *
+ * A hardcoded version is wrong the moment a release goes out, and this page
+ * spends its credibility on claims being checkable — a stale number undermines
+ * every other one next to it.
+ *
+ * Falls back to the constant above if the registry is slow or unreachable: a
+ * slightly old number is better than a broken section.
+ */
+export async function npmVersion(): Promise<string> {
+  try {
+    const res = await fetch(`https://registry.npmjs.org/${PACKAGE}/latest`, {
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(3000),
+    });
+    if (!res.ok) return stats.version;
+    const data = await res.json();
+    return typeof data?.version === "string" ? data.version : stats.version;
+  } catch {
+    return stats.version;
+  }
+}
