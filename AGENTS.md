@@ -58,9 +58,14 @@ during a blip.
 wire, amber is the single warning on the page (plugins have no sandbox). A
 fourth accent dilutes all three.
 
-**Every animation needs a still state.** `CipherField`, `Noise`, the typing
+**Every animation needs a still state.** `CipherMesh3D`, `Noise`, the typing
 hero, `Reveal`, `DecryptedText` and `ScrambledText` all check
 `prefers-reduced-motion`. Anything new must too.
+
+**Three.js is there for one thing: bloom.** It is the only dependency on the
+page that costs real weight, so it is loaded after first paint via
+`mesh-backdrop.tsx` and used for nothing else. If a future effect does not need
+post-processing, write it in canvas like the fire, the dissolve and the trace.
 
 ## Already learned the hard way
 
