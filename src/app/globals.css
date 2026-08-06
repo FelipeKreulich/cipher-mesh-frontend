@@ -53,6 +53,21 @@
   }
 }
 
+/* A row arriving. Used on the commands reference, where switching the mode
+   filter replays it down the list as a wave rather than swapping the whole
+   page at once. Small on purpose — sixty-seven rows moving far would be a
+   circus, and the reader is here to find one line. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

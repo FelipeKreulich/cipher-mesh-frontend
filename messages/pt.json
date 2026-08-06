@@ -21,11 +21,14 @@
     "groups": {
       "product": "O produto",
       "trust": "Confiança",
-      "join": "Participar"
+      "join": "Participar",
+      "reference": "Referência"
     },
     "menu": "Abrir menu",
     "skipToContent": "Saltar para o conteúdo",
-    "language": "Idioma"
+    "language": "Idioma",
+    "commands": "Comandos",
+    "changelog": "Alterações"
   },
   "hero": {
     "prompt": "cat o-que-o-servidor-ve",
@@ -418,5 +421,48 @@
     "terms": "Termos do hub",
     "security": "Política de segurança",
     "rights": "Licença MIT. Usa para coisas boas."
+  },
+  "commands": {
+    "meta": {
+      "title": "Comandos",
+      "description": "Todos os comandos do CipherMesh, pesquisáveis, com os que continuam a funcionar offline assinalados. Gerado a partir do código do cliente."
+    },
+    "prompt": "ciphermesh /help",
+    "title": "Todos os comandos, num sítio só",
+    "lead": "São {commands}, e {p2p} deles continuam a funcionar sem relay e sem internet nenhuma. Pesquisa, ou carrega em / e começa a escrever. Cada comando tem a sua própria ligação.",
+    "search": {
+      "placeholder": "verify, room, panic…",
+      "label": "Pesquisar nos comandos"
+    },
+    "filter": {
+      "label": "Filtrar por onde o comando funciona",
+      "all": "todos",
+      "relay": "relay",
+      "p2p": "funciona offline"
+    },
+    "matches": "{count} a corresponder",
+    "empty": "sem resultados para «{query}»",
+    "badge": {
+      "offline": "também offline",
+      "relayOnly": "só relay"
+    },
+    "copy": "Copiar",
+    "copied": "copiado",
+    "anchor": "Ligação para {name}",
+    "generated": "Esta lista não é escrita à mão. É gerada a partir das etiquetas case nos dois controladores do cliente, portanto um comando não pode existir sem aparecer aqui, e o funcionar offline é lido do controlador P2P em vez de ser afirmado:"
+  },
+  "changelog": {
+    "meta": {
+      "title": "Registo de alterações",
+      "description": "Todas as versões do CipherMesh e o que mudou em cada uma, lido diretamente do changelog do repositório."
+    },
+    "prompt": "cat CHANGELOG.md",
+    "title": "O que mudou, e quando",
+    "lead": "A versão atual é a {version}. Houve uma altura em que saíram seis versões em quatro dias — numa ferramenta de segurança, continuar a ser trabalhada faz parte da segurança.",
+    "leadPlain": "Numa ferramenta de segurança, continuar a ser trabalhada faz parte da segurança.",
+    "latest": "atual",
+    "release": "notas da versão →",
+    "note": "Lido do CHANGELOG do repositório em build, portanto esta página não pode discordar dele. As versões mais antigas e o histórico completo estão nas",
+    "releases": "releases"
   }
 }

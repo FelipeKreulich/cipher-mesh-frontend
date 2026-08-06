@@ -11,22 +11,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Link } from "@/i18n/navigation";
 
-type NavItem = { id: string; label: string };
+type NavItem = { id: string; label: string; href: string };
 export type NavGroup = { id: string; label: string; items: NavItem[] };
 
 /**
  * The complete index, grouped, at every width.
  *
  * Twelve sections in a row across the top was unreadable — a wall of 11px
- * links, all weighted the same, that nobody scans. They are the same twelve
- * sections; the grouping is what makes them findable, and it is not decorative:
- * what the thing is, whether to trust it, and how to take part are three
- * different questions, asked in that order by anyone arriving cold.
+ * links, all weighted the same, that nobody scans. They are the same sections;
+ * the grouping is what makes them findable, and it is not decorative: what the
+ * thing is, whether to trust it, how to take part, and where the reference
+ * lives are four different questions.
  *
- * The header keeps a handful of direct links beside this for the ones people
- * reach for first. Everything is in here either way — nothing is reachable from
- * one and not the other.
+ * Every href goes through the locale-aware Link, including the ones that are
+ * only anchors. The header is shared with `/commands` and `/changelog`, where a
+ * bare `#security` would scroll to nothing.
  */
 export function NavMenu({
   groups,
@@ -67,13 +68,13 @@ export function NavMenu({
               <div className="mt-2 flex flex-col">
                 {group.items.map((item) => (
                   <SheetClose key={item.id} asChild>
-                    <a
-                      href={`#${item.id}`}
+                    <Link
+                      href={item.href}
                       className="border-b border-line/60 py-2.5 font-mono text-sm text-dim transition-colors last:border-b-0 hover:text-ink"
                     >
                       <span className="text-signal-soft select-none">› </span>
                       {item.label}
-                    </a>
+                    </Link>
                   </SheetClose>
                 ))}
               </div>

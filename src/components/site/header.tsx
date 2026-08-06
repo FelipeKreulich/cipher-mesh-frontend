@@ -4,24 +4,36 @@ import { GitHubIcon } from "@/components/site/icons";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { Wordmark } from "@/components/site/logo";
 import { NavMenu } from "@/components/site/nav-menu";
+import { Link } from "@/i18n/navigation";
 import { site } from "@/lib/site";
 
 /**
- * The whole page, in the three questions someone arriving cold actually asks,
- * in the order they ask them: what is this, should I trust it, how do I take
- * part. Twelve equally weighted links in a row answered none of them.
+ * The whole site, in the questions someone arriving cold actually asks, in the
+ * order they ask them: what is this, should I trust it, how do I take part, and
+ * where is the reference. Twelve equally weighted links in a row answered none
+ * of them.
+ *
+ * Section links are absolute rather than bare fragments. This header is on
+ * `/commands` and `/changelog` too, where `#security` would scroll to nothing.
  */
 const GROUPS = [
   { id: "product", keys: ["replay", "what", "controls", "plugins"] },
   { id: "trust", keys: ["security", "verify", "limits", "versus"] },
   { id: "join", keys: ["start", "community", "open", "support"] },
+  { id: "reference", pages: ["commands", "changelog"] },
 ] as const;
 
 /**
- * The four kept in the bar itself: see it work, is it safe, how do I start, who
- * is already there. Not a ranking of the sections — a guess at the first click.
+ * Kept in the bar itself: see it work, is it safe, and the reference — the one
+ * page somebody would come back for on purpose. Not a ranking of the sections,
+ * a guess at the first click.
  */
-const PRIMARY = ["replay", "security", "start", "community"] as const;
+const PRIMARY = [
+  { key: "replay", href: "/#replay" },
+  { key: "security", href: "/#security" },
+  { key: "start", href: "/#start" },
+  { key: "commands", href: "/commands" },
+] as const;
 
 export function Header() {
   const t = useTranslations("nav");
@@ -44,14 +56,14 @@ export function Header() {
           aria-label={t("sections")}
           className="hidden items-center gap-6 md:flex"
         >
-          {PRIMARY.map((key) => (
-            <a
-              key={key}
-              href={`#${key}`}
+          {PRIMARY.map((item) => (
+            <Link
+              key={item.key}
+              href={item.href}
               className="font-mono text-xs whitespace-nowrap text-faint transition-colors hover:text-ink"
             >
-              {t(key)}
-            </a>
+              {t(item.key)}
+            </Link>
           ))}
         </nav>
 
@@ -62,7 +74,10 @@ export function Header() {
             groups={GROUPS.map((group) => ({
               id: group.id,
               label: t(`groups.${group.id}`),
-              items: group.keys.map((key) => ({ id: key, label: t(key) })),
+              items: ("pages" in group
+                ? group.pages.map((key) => ({ key, href: `/${key}` }))
+                : group.keys.map((key) => ({ key, href: `/#${key}` }))
+              ).map(({ key, href }) => ({ id: key, label: t(key), href })),
             }))}
           />
           <LanguageSwitcher label={t("language")} />
