@@ -18,7 +18,7 @@ envelope the same length, and no sender attached to any of them.
 | Framework  | Next.js 16 (App Router, Turbopack)                      |
 | Styling    | Tailwind CSS v4, design tokens in `src/app/globals.css` |
 | Components | shadcn/ui (`radix-nova`), React Bits effects            |
-| Motion     | Motion, GSAP (SplitText + ScrambleText), raw WebGL2     |
+| Motion     | Motion, GSAP (SplitText + ScrambleText), canvas 2D      |
 | i18n       | next-intl — English and Portuguese                      |
 | Tests      | Vitest + Testing Library                                |
 
