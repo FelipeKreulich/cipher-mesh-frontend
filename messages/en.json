@@ -421,7 +421,11 @@
     "npm": "npm",
     "terms": "Hub terms",
     "security": "Security policy",
-    "rights": "MIT licensed. Use it for good things."
+    "rights": "MIT licensed. Use it for good things.",
+    "status": "Status",
+    "feed": "RSS",
+    "commands": "Commands",
+    "changelog": "Changelog"
   },
   "commands": {
     "meta": {

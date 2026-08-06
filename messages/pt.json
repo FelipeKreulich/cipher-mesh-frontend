@@ -421,7 +421,11 @@
     "npm": "npm",
     "terms": "Termos do hub",
     "security": "Política de segurança",
-    "rights": "Licença MIT. Usa para coisas boas."
+    "rights": "Licença MIT. Usa para coisas boas.",
+    "status": "Estado",
+    "feed": "RSS",
+    "commands": "Comandos",
+    "changelog": "Alterações"
   },
   "commands": {
     "meta": {
