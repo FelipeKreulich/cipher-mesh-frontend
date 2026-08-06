@@ -6,18 +6,22 @@ import { Wordmark } from "@/components/site/logo";
 import { NavMenu } from "@/components/site/nav-menu";
 import { site } from "@/lib/site";
 
-// Same order as the page, so the nav doubles as a table of contents.
-const NAV = [
-  { id: "what", key: "what" },
-  { id: "security", key: "security" },
-  { id: "verify", key: "verify" },
-  { id: "start", key: "start" },
-  { id: "community", key: "community" },
-  { id: "controls", key: "controls" },
-  { id: "plugins", key: "plugins" },
-  { id: "open", key: "open" },
-  { id: "support", key: "support" },
+/**
+ * The whole page, in the three questions someone arriving cold actually asks,
+ * in the order they ask them: what is this, should I trust it, how do I take
+ * part. Twelve equally weighted links in a row answered none of them.
+ */
+const GROUPS = [
+  { id: "product", keys: ["replay", "what", "controls", "plugins"] },
+  { id: "trust", keys: ["security", "verify", "limits", "versus"] },
+  { id: "join", keys: ["start", "community", "open", "support"] },
 ] as const;
+
+/**
+ * The four kept in the bar itself: see it work, is it safe, how do I start, who
+ * is already there. Not a ranking of the sections — a guess at the first click.
+ */
+const PRIMARY = ["replay", "security", "start", "community"] as const;
 
 export function Header() {
   const t = useTranslations("nav");
@@ -38,15 +42,15 @@ export function Header() {
 
         <nav
           aria-label={t("sections")}
-          className="hidden items-center gap-4 xl:flex"
+          className="hidden items-center gap-6 md:flex"
         >
-          {NAV.map((item) => (
+          {PRIMARY.map((key) => (
             <a
-              key={item.id}
-              href={`#${item.id}`}
-              className="font-mono text-[11px] whitespace-nowrap text-faint transition-colors hover:text-ink"
+              key={key}
+              href={`#${key}`}
+              className="font-mono text-xs whitespace-nowrap text-faint transition-colors hover:text-ink"
             >
-              {t(item.key)}
+              {t(key)}
             </a>
           ))}
         </nav>
@@ -55,7 +59,11 @@ export function Header() {
           <NavMenu
             label={t("menu")}
             title={t("sections")}
-            items={NAV.map((item) => ({ id: item.id, label: t(item.key) }))}
+            groups={GROUPS.map((group) => ({
+              id: group.id,
+              label: t(`groups.${group.id}`),
+              items: group.keys.map((key) => ({ id: key, label: t(key) })),
+            }))}
           />
           <LanguageSwitcher label={t("language")} />
           <a
