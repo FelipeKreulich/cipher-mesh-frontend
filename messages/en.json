@@ -21,11 +21,14 @@
     "groups": {
       "product": "The product",
       "trust": "Trust",
-      "join": "Get involved"
+      "join": "Get involved",
+      "reference": "Reference"
     },
     "menu": "Open menu",
     "skipToContent": "Skip to content",
-    "language": "Language"
+    "language": "Language",
+    "commands": "Commands",
+    "changelog": "Changelog"
   },
   "hero": {
     "prompt": "cat what-the-server-sees",
@@ -418,5 +421,48 @@
     "terms": "Hub terms",
     "security": "Security policy",
     "rights": "MIT licensed. Use it for good things."
+  },
+  "commands": {
+    "meta": {
+      "title": "Commands",
+      "description": "Every CipherMesh command, searchable, with the ones that keep working offline marked. Generated from the client's source."
+    },
+    "prompt": "ciphermesh /help",
+    "title": "Every command, in one place",
+    "lead": "{commands} of them, and {p2p} keep working with no relay and no internet at all. Search, or press / and start typing. Every command has its own link.",
+    "search": {
+      "placeholder": "verify, room, panic…",
+      "label": "Search the commands"
+    },
+    "filter": {
+      "label": "Filter by where the command works",
+      "all": "all",
+      "relay": "relay",
+      "p2p": "works offline"
+    },
+    "matches": "{count} matching",
+    "empty": "no matches for “{query}”",
+    "badge": {
+      "offline": "offline too",
+      "relayOnly": "relay only"
+    },
+    "copy": "Copy",
+    "copied": "copied",
+    "anchor": "Link to {name}",
+    "generated": "This list is not written by hand. It is generated from the case labels in the client's two controllers, so a command cannot exist without appearing here, and whether it works offline is read from the P2P controller rather than claimed:"
+  },
+  "changelog": {
+    "meta": {
+      "title": "Changelog",
+      "description": "Every CipherMesh release and what changed in it, read straight from the repository's own changelog."
+    },
+    "prompt": "cat CHANGELOG.md",
+    "title": "What changed, and when",
+    "lead": "The current release is {version}. Six versions went out in four days at one point — for a security tool, still being worked on is part of the security.",
+    "leadPlain": "For a security tool, still being worked on is part of the security.",
+    "latest": "current",
+    "release": "release notes →",
+    "note": "Read from the repository's CHANGELOG at build time, so this page cannot disagree with it. Older versions and the full commit history live in the",
+    "releases": "releases"
   }
 }

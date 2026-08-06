@@ -1,3 +1,5 @@
+import snapshot from "@/lib/commands.snapshot.json";
+
 const PACKAGE = "ciphermesh";
 const REPO = "https://github.com/FelipeKreulich/secret-chat-lan";
 
@@ -28,10 +30,16 @@ export const site = {
  */
 export const stats = {
   /** Fallback only. The live value comes from npm — see npmVersion(). */
-  version: "2.8.0",
-  tests: 443,
-  commands: 66,
-  p2pCommands: 63,
+  version: "2.9.0",
+  tests: 450,
+  /**
+   * Fallbacks only. The live values come from the generated command list — see
+   * `commandReference()`. They were hand-written until 2026-08-06 and had drifted
+   * to 66 and 63 against a real 67 and 64, which is exactly the kind of small
+   * wrong number that costs a page its credibility on all the others.
+   */
+  commands: snapshot.counts.total,
+  p2pCommands: snapshot.counts.p2p,
 } as const;
 
 /**

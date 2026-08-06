@@ -40,7 +40,16 @@ describe("messages", () => {
     // next-intl parses every string as ICU, so a stray brace in prose — say a
     // code sample written as { send } — becomes a variable the component never
     // passes, and the section throws at render time.
-    const allowed = new Set(["version", "tests", "commands", "p2p", "range"]);
+    const allowed = new Set([
+      "version",
+      "tests",
+      "commands",
+      "p2p",
+      "range",
+      "count",
+      "query",
+      "name",
+    ]);
     const used = new Set<string>();
 
     for (const value of strings(tree)) {
