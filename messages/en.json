@@ -4,9 +4,12 @@
     "description": "A terminal chat where encryption is the product. The relay only ever sees ciphertext: it cannot read, alter or fake anything. Free and open source."
   },
   "nav": {
+    "replay": "See it run",
     "what": "What it is",
     "security": "Security",
     "verify": "Verify",
+    "limits": "Limits",
+    "versus": "vs Signal",
     "start": "Get started",
     "community": "Community",
     "controls": "Controls",
@@ -15,9 +18,17 @@
     "support": "Support",
     "github": "GitHub",
     "sections": "Sections",
+    "groups": {
+      "product": "The product",
+      "trust": "Trust",
+      "join": "Get involved",
+      "reference": "Reference"
+    },
     "menu": "Open menu",
     "skipToContent": "Skip to content",
-    "language": "Language"
+    "language": "Language",
+    "commands": "Commands",
+    "changelog": "Changelog"
   },
   "hero": {
     "prompt": "cat what-the-server-sees",
@@ -29,9 +40,18 @@
     "relaySeesMeta": "128 B · sender unknown · room unknown",
     "relayNote": "Same message, both sides. The envelope is padded to a fixed size, so its length says nothing about what is inside — and it is not signed with a name, so the relay cannot tell who sent it.",
     "transcript": [
-      { "who": "you", "text": "the key never leaves this machine" },
-      { "who": "peer", "text": "so the relay only ever moves noise?" },
-      { "who": "you", "text": "that is the entire idea" }
+      {
+        "who": "you",
+        "text": "the key never leaves this machine"
+      },
+      {
+        "who": "peer",
+        "text": "so the relay only ever moves noise?"
+      },
+      {
+        "who": "you",
+        "text": "that is the entire idea"
+      }
     ],
     "cta": "Start chatting",
     "ctaSecondary": "Read the code",
@@ -48,6 +68,26 @@
       "commands": "{commands} in the client, {p2p} of them offline too",
       "transport": "X25519 + ML-KEM-768, sealed sender, padded",
       "license": "MIT — fork it, run it, read it"
+    }
+  },
+  "replay": {
+    "prompt": "ciphermesh replay",
+    "title": "A whole session, start to wiped",
+    "lead": "Everything else on this page describes CipherMesh. This is it running: connect to the hub, prove who is on the other end, say something, then wipe the disk. It is a recording rather than a video — every line is text the client actually prints, replayed in the browser.",
+    "replay": "Replay",
+    "notes": {
+      "verbatim": {
+        "name": "The strings are the client's",
+        "body": "Every system, info and error line here is copied out of the client's source rather than written for the page. If one of them changes in a future release, this goes stale in a way somebody will notice."
+      },
+      "derived": {
+        "name": "The key art is computed",
+        "body": "The randomart block is not a screenshot. The browser runs the same drunken-bishop walk the terminal runs, over the same demo key, so the picture cannot drift away from the algorithm it is showing."
+      },
+      "nothing": {
+        "name": "A few kilobytes of text",
+        "body": "A video would not follow the theme, would blur on a phone and would go stale silently. Text stays sharp at any size, costs almost nothing to load, and a screen reader can read the whole session."
+      }
     }
   },
   "features": {
@@ -162,7 +202,30 @@
     "prompt": "ciphermesh /verify",
     "title": "Encryption is only half of it",
     "lead": "Sealing a message protects it from the relay. It says nothing about who is holding the other key. CipherMesh makes that check something you can finish in about ten seconds.",
-    "outputLabel": "in the room",
+    "check": {
+      "toggle": {
+        "label": "Connection state",
+        "direct": "direct connection",
+        "intercepted": "someone in the middle"
+      },
+      "panes": {
+        "you": "your terminal",
+        "them": "rita's terminal"
+      },
+      "verdict": {
+        "match": {
+          "tag": "codes agree",
+          "title": "The same code on both screens.",
+          "body": "Neither side sent the code to the other — both derived it from the two public keys. They can only agree if those keys are the real ones, so there is no third key in the path. Confirm with /verify-confirm rita and the client remembers from then on."
+        },
+        "differ": {
+          "tag": "codes disagree",
+          "title": "Different codes. Stop here.",
+          "body": "Each side is holding a key belonging to the machine in between, so each is hashing a different pair. Everything else looks normal — the chat works, the names are right — and this is the only thing that gives it away. Do not confirm, and reach the person another way."
+        }
+      },
+      "note": "Illustrative keys. The browser hashes with SHA-256 because it has no BLAKE2b; the client uses BLAKE2b-256. The construction is the client's: sort both public keys, hash them with a domain separator, read five bytes as thirteen digits grouped 4-4-5."
+    },
     "items": {
       "sas": {
         "name": "Compare thirteen digits",
@@ -178,6 +241,89 @@
       }
     },
     "note": "/fingerprint prints your own, /trustlist shows everyone you have confirmed. None of this is buried in a settings screen."
+  },
+  "limits": {
+    "prompt": "cat SECURITY.md",
+    "title": "What this does not protect",
+    "lead": "Encryption is a narrow promise, and a page that lists only strengths is asking you to trust a sales pitch. None of this is new — it is in SECURITY.md and in section 2 of the terms — but it belongs where people actually read.",
+    "groups": {
+      "relay": {
+        "name": "What the relay necessarily sees",
+        "items": {
+          "address": {
+            "name": "Your network address",
+            "body": "It has to route packets somewhere. Put Tor or a VPN in front if that matters to you, or run /p2p and take the relay out of the picture entirely."
+          },
+          "identity": {
+            "name": "Your nickname and public key",
+            "body": "A room has to route to somebody. A nickname is not an authenticated identity, which is exactly why verification exists."
+          },
+          "shape": {
+            "name": "When you talk, and roughly how much",
+            "body": "Content is sealed and padded into fixed buckets, but timing and bucket size still travel. Sealed sender hides who sent a message from an honest-but-curious relay; a hostile one can still tie a socket to a session."
+          }
+        }
+      },
+      "device": {
+        "name": "What no protocol can fix",
+        "items": {
+          "endpoint": {
+            "name": "A device someone else is holding",
+            "body": "If somebody has your machine while it is unlocked, they have the plaintext. End-to-end means the ends, and your end is one of them."
+          },
+          "exported": {
+            "name": "/export writes plaintext",
+            "body": "It is your data and the command is explicit, but the file it produces carries none of the protection the conversation had."
+          },
+          "names": {
+            "name": "Names prove nothing",
+            "body": "Anyone can call themselves anything. Trust attaches to keys, through pinning and SAS, and never to a nickname."
+          }
+        }
+      },
+      "panic": {
+        "name": "What /panic cannot undo",
+        "items": {
+          "sent": {
+            "name": "Anything already delivered",
+            "body": "It wipes your disk, not theirs. A message the other side received sits on their machine and stays there."
+          },
+          "copies": {
+            "name": "Copies you made yourself",
+            "body": "Exports, screenshots and pasted text are outside the client's reach the moment they exist."
+          },
+          "memory": {
+            "name": "That you connected at all",
+            "body": "Operational logs record connections and room events — never content — and are deleted after at most seven days."
+          }
+        }
+      }
+    },
+    "close": "If any of that is unacceptable for what you are doing, this is the wrong tool. Saying so here is better than you finding out after relying on it."
+  },
+  "versus": {
+    "prompt": "ciphermesh --why",
+    "title": "Why not just use Signal?",
+    "lead": "Most people should use Signal. It is audited, it is maintained by people paid to maintain it, and it runs on the phone already in your pocket. This is not competing with that — it answers a different question.",
+    "columns": {
+      "signal": {
+        "name": "Use Signal when",
+        "items": {
+          "phone": "You want the thing your family will actually install and keep using.",
+          "audited": "You want formally reviewed cryptography with a funded team behind it.",
+          "everyone": "Handing over a phone number to register is not a problem for you."
+        }
+      },
+      "mesh": {
+        "name": "Use CipherMesh when",
+        "items": {
+          "lan": "There is no internet — a LAN, a workshop, a boat, a building with no signal. /p2p needs nothing beyond the network you are standing on.",
+          "terminal": "You live in a terminal and want chat to be one of the windows: scriptable, themeable, and extensible like everything else there.",
+          "yours": "You want to run the server yourself, read all of it, and register with nothing at all — no phone number, no email, no account."
+        }
+      }
+    },
+    "close": "Both can be true on the same day. Being direct about it costs nothing, and a project that claims to beat Signal is telling you something about its judgement."
   },
   "controls": {
     "prompt": "ciphermesh --panic",
@@ -275,5 +421,48 @@
     "terms": "Hub terms",
     "security": "Security policy",
     "rights": "MIT licensed. Use it for good things."
+  },
+  "commands": {
+    "meta": {
+      "title": "Commands",
+      "description": "Every CipherMesh command, searchable, with the ones that keep working offline marked. Generated from the client's source."
+    },
+    "prompt": "ciphermesh /help",
+    "title": "Every command, in one place",
+    "lead": "{commands} of them, and {p2p} keep working with no relay and no internet at all. Search, or press / and start typing. Every command has its own link.",
+    "search": {
+      "placeholder": "verify, room, panic…",
+      "label": "Search the commands"
+    },
+    "filter": {
+      "label": "Filter by where the command works",
+      "all": "all",
+      "relay": "relay",
+      "p2p": "works offline"
+    },
+    "matches": "{count} matching",
+    "empty": "no matches for “{query}”",
+    "badge": {
+      "offline": "offline too",
+      "relayOnly": "relay only"
+    },
+    "copy": "Copy",
+    "copied": "copied",
+    "anchor": "Link to {name}",
+    "generated": "This list is not written by hand. It is generated from the case labels in the client's two controllers, so a command cannot exist without appearing here, and whether it works offline is read from the P2P controller rather than claimed:"
+  },
+  "changelog": {
+    "meta": {
+      "title": "Changelog",
+      "description": "Every CipherMesh release and what changed in it, read straight from the repository's own changelog."
+    },
+    "prompt": "cat CHANGELOG.md",
+    "title": "What changed, and when",
+    "lead": "The current release is {version}. Six versions went out in four days at one point — for a security tool, still being worked on is part of the security.",
+    "leadPlain": "For a security tool, still being worked on is part of the security.",
+    "latest": "current",
+    "release": "release notes →",
+    "note": "Read from the repository's CHANGELOG at build time, so this page cannot disagree with it. Older versions and the full commit history live in the",
+    "releases": "releases"
   }
 }

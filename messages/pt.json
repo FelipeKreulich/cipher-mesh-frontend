@@ -4,9 +4,12 @@
     "description": "Uma conversa de terminal em que a cifra é o produto. O relay só vê texto cifrado: não lê, não altera, não forja nada. Gratuito e de código aberto."
   },
   "nav": {
+    "replay": "Vê a correr",
     "what": "O que é",
     "security": "Segurança",
     "verify": "Verificação",
+    "limits": "Limites",
+    "versus": "vs Signal",
     "start": "Começar",
     "community": "Comunidade",
     "controls": "Controlos",
@@ -15,9 +18,17 @@
     "support": "Apoiar",
     "github": "GitHub",
     "sections": "Secções",
+    "groups": {
+      "product": "O produto",
+      "trust": "Confiança",
+      "join": "Participar",
+      "reference": "Referência"
+    },
     "menu": "Abrir menu",
     "skipToContent": "Saltar para o conteúdo",
-    "language": "Idioma"
+    "language": "Idioma",
+    "commands": "Comandos",
+    "changelog": "Alterações"
   },
   "hero": {
     "prompt": "cat o-que-o-servidor-ve",
@@ -29,9 +40,18 @@
     "relaySeesMeta": "128 B · remetente desconhecido · sala desconhecida",
     "relayNote": "A mesma mensagem, dos dois lados. O envelope é preenchido até um tamanho fixo, portanto o comprimento não diz nada sobre o conteúdo — e não vai assinado, portanto o relay não sabe quem o enviou.",
     "transcript": [
-      { "who": "you", "text": "a chave nunca sai desta máquina" },
-      { "who": "peer", "text": "então o relay só transporta ruído?" },
-      { "who": "you", "text": "é exactamente essa a ideia" }
+      {
+        "who": "you",
+        "text": "a chave nunca sai desta máquina"
+      },
+      {
+        "who": "peer",
+        "text": "então o relay só transporta ruído?"
+      },
+      {
+        "who": "you",
+        "text": "é exactamente essa a ideia"
+      }
     ],
     "cta": "Começar a conversar",
     "ctaSecondary": "Ver o código",
@@ -48,6 +68,26 @@
       "commands": "{commands} no cliente, {p2p} deles também sem servidor",
       "transport": "X25519 + ML-KEM-768, sealed sender, com padding",
       "license": "MIT — clona, corre, lê"
+    }
+  },
+  "replay": {
+    "prompt": "ciphermesh replay",
+    "title": "Uma sessão inteira, do arranque até apagar tudo",
+    "lead": "Todo o resto desta página descreve o CipherMesh. Isto é ele a correr: ligar ao hub, provar quem está do outro lado, dizer alguma coisa e depois limpar o disco. É uma gravação, não um vídeo — cada linha é texto que o cliente imprime mesmo, reproduzido no browser.",
+    "replay": "Repetir",
+    "notes": {
+      "verbatim": {
+        "name": "As frases são as do cliente",
+        "body": "Cada linha de sistema, de informação e de erro foi copiada do código do cliente, não escrita para esta página. Se alguma mudar numa versão futura, isto fica desatualizado de uma forma que alguém vai reparar."
+      },
+      "derived": {
+        "name": "O desenho da chave é calculado",
+        "body": "O bloco de randomart não é uma captura de ecrã. O browser corre o mesmo passeio do bispo bêbado que o terminal corre, sobre a mesma chave de exemplo, portanto o desenho não se pode afastar do algoritmo que mostra."
+      },
+      "nothing": {
+        "name": "Uns poucos kilobytes de texto",
+        "body": "Um vídeo não seguiria o tema, ficaria desfocado no telemóvel e desatualizava-se em silêncio. Texto mantém-se nítido em qualquer tamanho, custa quase nada a carregar, e um leitor de ecrã consegue ler a sessão toda."
+      }
     }
   },
   "features": {
@@ -105,7 +145,30 @@
     "prompt": "ciphermesh /verify",
     "title": "Cifrar é só metade",
     "lead": "Selar a mensagem protege-a do relay. Não diz nada sobre quem está do outro lado com a chave. O CipherMesh transforma essa conferência em algo que se faz em cerca de dez segundos.",
-    "outputLabel": "na sala",
+    "check": {
+      "toggle": {
+        "label": "Estado da ligação",
+        "direct": "ligação direta",
+        "intercepted": "alguém pelo meio"
+      },
+      "panes": {
+        "you": "o teu terminal",
+        "them": "o terminal da rita"
+      },
+      "verdict": {
+        "match": {
+          "tag": "os códigos coincidem",
+          "title": "O mesmo código nos dois ecrãs.",
+          "body": "Nenhum dos lados enviou o código ao outro — os dois derivaram-no das duas chaves públicas. Só podem coincidir se essas chaves forem as verdadeiras, portanto não há uma terceira chave pelo caminho. Confirma com /verify-confirm rita e o cliente passa a lembrar-se."
+        },
+        "differ": {
+          "tag": "os códigos divergem",
+          "title": "Códigos diferentes. Pára aqui.",
+          "body": "Cada lado tem uma chave que pertence à máquina do meio, por isso cada um está a fazer o hash de um par diferente. Todo o resto parece normal — o chat funciona, os nomes estão certos — e isto é a única coisa que denuncia. Não confirmes, e fala com a pessoa por outra via."
+        }
+      },
+      "note": "Chaves de exemplo. O browser faz hash com SHA-256 porque não tem BLAKE2b; o cliente usa BLAKE2b-256. A construção é a do cliente: ordenar as duas chaves públicas, fazer hash com um separador de domínio, ler cinco bytes como treze dígitos agrupados 4-4-5."
+    },
     "items": {
       "sas": {
         "name": "Confere treze dígitos",
@@ -121,6 +184,89 @@
       }
     },
     "note": "/fingerprint mostra a tua, /trustlist lista toda a gente que já confirmaste. Nada disto está escondido num ecrã de definições."
+  },
+  "limits": {
+    "prompt": "cat SECURITY.md",
+    "title": "O que isto não protege",
+    "lead": "Cifrar é uma promessa estreita, e uma página que só lista virtudes está a pedir-te que confies num argumento de venda. Nada disto é novo — está no SECURITY.md e na secção 2 dos termos — mas pertence ao sítio onde as pessoas leem mesmo.",
+    "groups": {
+      "relay": {
+        "name": "O que o relay vê por necessidade",
+        "items": {
+          "address": {
+            "name": "O teu endereço de rede",
+            "body": "Tem de encaminhar pacotes para algum lado. Põe o Tor ou uma VPN à frente se isso te importa, ou usa /p2p e tira o relay da equação por completo."
+          },
+          "identity": {
+            "name": "A tua alcunha e a tua chave pública",
+            "body": "Uma sala tem de encaminhar para alguém. Uma alcunha não é uma identidade autenticada — é precisamente por isso que existe a verificação."
+          },
+          "shape": {
+            "name": "Quando falas, e mais ou menos quanto",
+            "body": "O conteúdo vai selado e enchido até tamanhos fixos, mas o momento e o tamanho do balde continuam a viajar. O remetente selado esconde quem enviou de um relay honesto-mas-curioso; um relay hostil ainda consegue ligar um socket a uma sessão."
+          }
+        }
+      },
+      "device": {
+        "name": "O que nenhum protocolo resolve",
+        "items": {
+          "endpoint": {
+            "name": "Um aparelho que está na mão de outra pessoa",
+            "body": "Se alguém tem a tua máquina desbloqueada, tem o texto em claro. Ponta a ponta quer dizer as pontas, e a tua é uma delas."
+          },
+          "exported": {
+            "name": "O /export escreve em claro",
+            "body": "Os dados são teus e o comando é explícito, mas o ficheiro que sai não leva nenhuma das proteções que a conversa tinha."
+          },
+          "names": {
+            "name": "Nomes não provam nada",
+            "body": "Qualquer pessoa se pode chamar o que quiser. A confiança prende-se a chaves, por fixação e por SAS, nunca a uma alcunha."
+          }
+        }
+      },
+      "panic": {
+        "name": "O que o /panic não desfaz",
+        "items": {
+          "sent": {
+            "name": "O que já foi entregue",
+            "body": "Limpa o teu disco, não o dos outros. Uma mensagem que o outro lado recebeu está na máquina dele e lá fica."
+          },
+          "copies": {
+            "name": "As cópias que fizeste tu",
+            "body": "Exportações, capturas de ecrã e texto colado ficam fora do alcance do cliente no instante em que passam a existir."
+          },
+          "memory": {
+            "name": "Que chegaste a ligar-te",
+            "body": "Os registos operacionais guardam ligações e eventos de sala — nunca conteúdo — e são apagados ao fim de sete dias, no máximo."
+          }
+        }
+      }
+    },
+    "close": "Se alguma destas coisas for inaceitável para aquilo que fazes, esta é a ferramenta errada. Dizê-lo aqui é melhor do que descobrires depois de teres contado com ela."
+  },
+  "versus": {
+    "prompt": "ciphermesh --why",
+    "title": "Porque não usar simplesmente o Signal?",
+    "lead": "A maioria das pessoas devia usar o Signal. É auditado, é mantido por gente paga para o manter, e corre no telemóvel que já tens no bolso. Isto não compete com aquilo — responde a outra pergunta.",
+    "columns": {
+      "signal": {
+        "name": "Usa o Signal quando",
+        "items": {
+          "phone": "Queres aquilo que a tua família instala mesmo e continua a usar.",
+          "audited": "Queres criptografia formalmente revista, com uma equipa financiada por trás.",
+          "everyone": "Dar um número de telemóvel para te registares não é problema."
+        }
+      },
+      "mesh": {
+        "name": "Usa o CipherMesh quando",
+        "items": {
+          "lan": "Não há internet — uma LAN, uma oficina, um barco, um edifício sem rede. O /p2p não precisa de mais nada além da rede onde estás.",
+          "terminal": "Vives num terminal e queres que o chat seja mais uma janela: automatizável, com temas e com extensões, como tudo o resto por ali.",
+          "yours": "Queres correr o servidor tu, ler o código todo, e registar-te com absolutamente nada — sem número, sem email, sem conta."
+        }
+      }
+    },
+    "close": "As duas coisas podem ser verdade no mesmo dia. Dizê-lo de frente não custa nada, e um projeto que garante bater o Signal está a dizer-te alguma coisa sobre o seu discernimento."
   },
   "start": {
     "prompt": "npx ciphermesh@latest",
@@ -275,5 +421,48 @@
     "terms": "Termos do hub",
     "security": "Política de segurança",
     "rights": "Licença MIT. Usa para coisas boas."
+  },
+  "commands": {
+    "meta": {
+      "title": "Comandos",
+      "description": "Todos os comandos do CipherMesh, pesquisáveis, com os que continuam a funcionar offline assinalados. Gerado a partir do código do cliente."
+    },
+    "prompt": "ciphermesh /help",
+    "title": "Todos os comandos, num sítio só",
+    "lead": "São {commands}, e {p2p} deles continuam a funcionar sem relay e sem internet nenhuma. Pesquisa, ou carrega em / e começa a escrever. Cada comando tem a sua própria ligação.",
+    "search": {
+      "placeholder": "verify, room, panic…",
+      "label": "Pesquisar nos comandos"
+    },
+    "filter": {
+      "label": "Filtrar por onde o comando funciona",
+      "all": "todos",
+      "relay": "relay",
+      "p2p": "funciona offline"
+    },
+    "matches": "{count} a corresponder",
+    "empty": "sem resultados para «{query}»",
+    "badge": {
+      "offline": "também offline",
+      "relayOnly": "só relay"
+    },
+    "copy": "Copiar",
+    "copied": "copiado",
+    "anchor": "Ligação para {name}",
+    "generated": "Esta lista não é escrita à mão. É gerada a partir das etiquetas case nos dois controladores do cliente, portanto um comando não pode existir sem aparecer aqui, e o funcionar offline é lido do controlador P2P em vez de ser afirmado:"
+  },
+  "changelog": {
+    "meta": {
+      "title": "Registo de alterações",
+      "description": "Todas as versões do CipherMesh e o que mudou em cada uma, lido diretamente do changelog do repositório."
+    },
+    "prompt": "cat CHANGELOG.md",
+    "title": "O que mudou, e quando",
+    "lead": "A versão atual é a {version}. Houve uma altura em que saíram seis versões em quatro dias — numa ferramenta de segurança, continuar a ser trabalhada faz parte da segurança.",
+    "leadPlain": "Numa ferramenta de segurança, continuar a ser trabalhada faz parte da segurança.",
+    "latest": "atual",
+    "release": "notas da versão →",
+    "note": "Lido do CHANGELOG do repositório em build, portanto esta página não pode discordar dele. As versões mais antigas e o histórico completo estão nas",
+    "releases": "releases"
   }
 }

@@ -4,19 +4,35 @@ import { GitHubIcon } from "@/components/site/icons";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { Wordmark } from "@/components/site/logo";
 import { NavMenu } from "@/components/site/nav-menu";
+import { Link } from "@/i18n/navigation";
 import { site } from "@/lib/site";
 
-// Same order as the page, so the nav doubles as a table of contents.
-const NAV = [
-  { id: "what", key: "what" },
-  { id: "security", key: "security" },
-  { id: "verify", key: "verify" },
-  { id: "start", key: "start" },
-  { id: "community", key: "community" },
-  { id: "controls", key: "controls" },
-  { id: "plugins", key: "plugins" },
-  { id: "open", key: "open" },
-  { id: "support", key: "support" },
+/**
+ * The whole site, in the questions someone arriving cold actually asks, in the
+ * order they ask them: what is this, should I trust it, how do I take part, and
+ * where is the reference. Twelve equally weighted links in a row answered none
+ * of them.
+ *
+ * Section links are absolute rather than bare fragments. This header is on
+ * `/commands` and `/changelog` too, where `#security` would scroll to nothing.
+ */
+const GROUPS = [
+  { id: "product", keys: ["replay", "what", "controls", "plugins"] },
+  { id: "trust", keys: ["security", "verify", "limits", "versus"] },
+  { id: "join", keys: ["start", "community", "open", "support"] },
+  { id: "reference", pages: ["commands", "changelog"] },
+] as const;
+
+/**
+ * Kept in the bar itself: see it work, is it safe, and the reference — the one
+ * page somebody would come back for on purpose. Not a ranking of the sections,
+ * a guess at the first click.
+ */
+const PRIMARY = [
+  { key: "replay", href: "/#replay" },
+  { key: "security", href: "/#security" },
+  { key: "start", href: "/#start" },
+  { key: "commands", href: "/commands" },
 ] as const;
 
 export function Header() {
@@ -38,16 +54,16 @@ export function Header() {
 
         <nav
           aria-label={t("sections")}
-          className="hidden items-center gap-4 xl:flex"
+          className="hidden items-center gap-6 md:flex"
         >
-          {NAV.map((item) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              className="font-mono text-[11px] whitespace-nowrap text-faint transition-colors hover:text-ink"
+          {PRIMARY.map((item) => (
+            <Link
+              key={item.key}
+              href={item.href}
+              className="font-mono text-xs whitespace-nowrap text-faint transition-colors hover:text-ink"
             >
               {t(item.key)}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -55,7 +71,14 @@ export function Header() {
           <NavMenu
             label={t("menu")}
             title={t("sections")}
-            items={NAV.map((item) => ({ id: item.id, label: t(item.key) }))}
+            groups={GROUPS.map((group) => ({
+              id: group.id,
+              label: t(`groups.${group.id}`),
+              items: ("pages" in group
+                ? group.pages.map((key) => ({ key, href: `/${key}` }))
+                : group.keys.map((key) => ({ key, href: `/#${key}` }))
+              ).map(({ key, href }) => ({ id: key, label: t(key), href })),
+            }))}
           />
           <LanguageSwitcher label={t("language")} />
           <a
