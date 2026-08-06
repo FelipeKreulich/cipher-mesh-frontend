@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
@@ -50,9 +50,16 @@ describe("CommandBrowser", () => {
 
     await user.type(screen.getByRole("searchbox"), "panic");
 
-    const shown = [...container.querySelectorAll("li[id]")].map((li) => li.id);
-    expect(shown).toContain("panic");
-    expect(shown.length).toBeLessThan(all.length);
+    // waitFor, not a bare read: user.type resolves once the keystrokes are
+    // dispatched, and the re-render that filters the list happens after. Under
+    // a loaded suite that gap is wide enough to read the unfiltered DOM.
+    await waitFor(() => {
+      const shown = [...container.querySelectorAll("li[id]")].map(
+        (li) => li.id,
+      );
+      expect(shown).toContain("panic");
+      expect(shown.length).toBeLessThan(all.length);
+    });
   });
 
   it("filters to the commands that survive without a relay", async () => {
@@ -61,10 +68,14 @@ describe("CommandBrowser", () => {
 
     await user.click(screen.getByRole("button", { name: /offline/i }));
 
-    const shown = [...container.querySelectorAll("li[id]")].map((li) => li.id);
-    // /create is relay-only — a room with a password needs a server to hold it.
-    expect(shown).not.toContain("create");
-    expect(shown).toContain("verify");
+    await waitFor(() => {
+      const shown = [...container.querySelectorAll("li[id]")].map(
+        (li) => li.id,
+      );
+      // /create is relay-only — a room with a password needs a server to hold it.
+      expect(shown).not.toContain("create");
+      expect(shown).toContain("verify");
+    });
   });
 
   it("says so plainly when nothing matches", async () => {
@@ -73,8 +84,10 @@ describe("CommandBrowser", () => {
 
     await user.type(screen.getByRole("searchbox"), "zzzzz");
 
-    expect(container.querySelectorAll("li[id]").length).toBe(0);
-    expect(screen.getByText(/zzzzz/)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(container.querySelectorAll("li[id]").length).toBe(0);
+      expect(screen.getByText(/zzzzz/)).toBeInTheDocument();
+    });
   });
 });
 
