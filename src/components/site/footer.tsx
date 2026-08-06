@@ -2,8 +2,17 @@ import { useTranslations } from "next-intl";
 
 import { GitHubIcon } from "@/components/site/icons";
 import { Wordmark } from "@/components/site/logo";
+import { Link } from "@/i18n/navigation";
 import { site } from "@/lib/site";
 
+/** Pages on this site. Internal, so they route through the locale-aware Link. */
+const PAGES = [
+  { key: "commands", href: "/commands" },
+  { key: "changelog", href: "/changelog" },
+  { key: "status", href: "/status" },
+] as const;
+
+/** Everything that lives somewhere else. */
 const LINKS = [
   { key: "source", href: site.repo },
   { key: "npm", href: site.npm },
@@ -34,6 +43,23 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col items-start gap-3 sm:items-end">
+          <nav className="flex flex-wrap gap-x-6 gap-y-2">
+            {PAGES.map((page) => (
+              <Link
+                key={page.key}
+                href={page.href}
+                className="font-mono text-xs text-faint transition-colors hover:text-ink"
+              >
+                {t(page.key)}
+              </Link>
+            ))}
+            <a
+              href="/changelog.xml"
+              className="font-mono text-xs text-faint transition-colors hover:text-ink"
+            >
+              {t("feed")}
+            </a>
+          </nav>
           <nav className="flex flex-wrap gap-x-6 gap-y-2">
             {LINKS.map((link) => (
               <a

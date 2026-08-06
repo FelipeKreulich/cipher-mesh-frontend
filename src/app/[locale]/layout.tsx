@@ -4,11 +4,13 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { MeshBackdrop } from "@/components/site/mesh-backdrop";
+import { CommandPalette } from "@/components/site/command-palette";
+import { RatchetField } from "@/components/site/ratchet-field";
 import { Footer } from "@/components/site/footer";
 import { Header } from "@/components/site/header";
 import { routing } from "@/i18n/routing";
 import { site } from "@/lib/site";
+import { paletteData } from "@/lib/palette";
 
 import "../globals.css";
 
@@ -66,6 +68,13 @@ export async function generateMetadata({
       languages: Object.fromEntries(
         routing.locales.map((value) => [value, `/${value}`]),
       ),
+      // Declared on every page, not just the changelog: a reader should be able
+      // to subscribe from wherever they happen to have landed.
+      types: {
+        "application/atom+xml": [
+          { url: "/changelog.xml", title: `${site.name} releases` },
+        ],
+      },
     },
     openGraph: {
       type: "website",
@@ -107,11 +116,11 @@ export default async function LocaleLayout({
           className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
         >
           <div className="absolute inset-0 bg-[radial-gradient(80%_55%_at_50%_0%,rgba(123,45,255,0.12),transparent_70%)]" />
-          {/* The lattice sits behind the first screen only. Fading it out down
-              the page keeps it from arguing with every section below, and the
-              mask means it never has to be scrolled past. */}
+          {/* The ratchet field sits behind the first screen only. Fading it out
+              down the page keeps it from arguing with every section below, and
+              the mask means it never has to be scrolled past. */}
           <div className="absolute inset-x-0 top-0 h-[110svh] [mask-image:linear-gradient(to_bottom,black_35%,transparent_92%)] opacity-70">
-            <MeshBackdrop className="h-full w-full" />
+            <RatchetField className="h-full w-full" />
           </div>
         </div>
 
@@ -119,6 +128,9 @@ export default async function LocaleLayout({
           <Header />
           <main id="main">{children}</main>
           <Footer />
+          {/* Ctrl+K, on every page. Its contents are assembled on the server so
+              opening it costs no request. */}
+          <CommandPalette data={await paletteData()} />
         </NextIntlClientProvider>
       </body>
     </html>

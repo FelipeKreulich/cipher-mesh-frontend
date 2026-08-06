@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { Reveal } from "@/components/site/reveal";
+import { commandReference } from "@/lib/commands";
 import { npmVersion, stats } from "@/lib/site";
 
 const ROWS = ["version", "tests", "commands", "transport", "license"] as const;
@@ -11,8 +12,14 @@ const ROWS = ["version", "tests", "commands", "transport", "license"] as const;
  */
 export async function Proof() {
   const t = await getTranslations("proof");
-  // Read live, so a release never leaves the page claiming an old version.
-  const version = await npmVersion();
+  // Both read live. This section invites people to go and check its numbers
+  // against the repository, which makes a stale one worse than no number: it
+  // discredits the four next to it. The version comes from npm, the command
+  // counts from the list generated out of the client's own source.
+  const [version, reference] = await Promise.all([
+    npmVersion(),
+    commandReference(),
+  ]);
 
   return (
     <section id="proof" className="relative scroll-mt-20 py-16 sm:py-20">
@@ -28,8 +35,8 @@ export async function Proof() {
                     {t(`values.${row}`, {
                       version,
                       tests: stats.tests,
-                      commands: stats.commands,
-                      p2p: stats.p2pCommands,
+                      commands: reference.counts.total,
+                      p2p: reference.counts.p2p,
                     })}
                   </dd>
                 </div>
