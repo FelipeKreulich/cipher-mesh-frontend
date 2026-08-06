@@ -56,7 +56,8 @@
     "cta": "Começar a conversar",
     "ctaSecondary": "Ver o código",
     "copy": "Copiar",
-    "copied": "Copiado"
+    "copied": "Copiado",
+    "palette": "pesquisa tudo — secções, os 67 comandos, todas as versões"
   },
   "proof": {
     "prompt": "ciphermesh --version",
@@ -420,7 +421,11 @@
     "npm": "npm",
     "terms": "Termos do hub",
     "security": "Política de segurança",
-    "rights": "Licença MIT. Usa para coisas boas."
+    "rights": "Licença MIT. Usa para coisas boas.",
+    "status": "Estado",
+    "feed": "RSS",
+    "commands": "Comandos",
+    "changelog": "Alterações"
   },
   "commands": {
     "meta": {
@@ -464,5 +469,39 @@
     "release": "notas da versão →",
     "note": "Lido do CHANGELOG do repositório em build, portanto esta página não pode discordar dele. As versões mais antigas e o histórico completo estão nas",
     "releases": "releases"
+  },
+  "status": {
+    "meta": {
+      "title": "Estado",
+      "description": "Se o hub do CipherMesh e os dados que este site lê estão bem neste momento."
+    },
+    "prompt": "ciphermesh --doctor",
+    "title": "Está alguma coisa partida?",
+    "overall": {
+      "ok": "tudo o que é medido aqui está a responder",
+      "degraded": "alguma coisa não está a responder",
+      "unknown": "não há dados suficientes"
+    },
+    "checks": {
+      "relay": "relay",
+      "npm": "versão publicada",
+      "commands": "referência de comandos",
+      "changelog": "registo de alterações"
+    },
+    "notMeasured": "Medido a partir deste servidor, no momento em que abriste a página — nada aqui está em cache. Duas coisas que não consegue verificar: o upgrade WebSocket em si, que precisa de um handshake a sério e não de um pedido HTTP, e o certificado.",
+    "monitor": "Essas duas são vigiadas de dez em dez minutos a partir do GitHub, e não da máquina que vigiam, porque um monitor alojado na máquina que monitoriza morre com ela:",
+    "privacy": "A linha do relay dá um intervalo, nunca uma contagem exata. Um número exato ao vivo deixaria qualquer pessoa a recarregar esta página ver gente a chegar e a sair — que é precisamente o metadado que o relay existe para não revelar."
+  },
+  "palette": {
+    "title": "Pesquisa",
+    "description": "Salta para uma secção, um comando ou uma versão.",
+    "placeholder": "Escreve para pesquisar…",
+    "empty": "Nada corresponde a isso.",
+    "groups": {
+      "sections": "Secções",
+      "commands": "Comandos",
+      "releases": "Versões"
+    },
+    "footer": "ctrl+k para abrir"
   }
 }

@@ -128,6 +128,20 @@ export function Hero() {
           />
         </div>
 
+        {/* The site opens a command palette on the same key the client does.
+            Saying so here is the cheapest way for anyone to find out — a
+            shortcut nobody is told about may as well not exist. */}
+        <p className="mt-5 flex items-center gap-2 font-mono text-xs text-faint">
+          <kbd className="rounded-sm border border-line bg-panel px-1.5 py-0.5 text-[11px] text-dim">
+            ctrl
+          </kbd>
+          <span aria-hidden="true">+</span>
+          <kbd className="rounded-sm border border-line bg-panel px-1.5 py-0.5 text-[11px] text-dim">
+            k
+          </kbd>
+          <span>{t("palette")}</span>
+        </p>
+
         {/* The signature: the same conversation twice. Left grows and shrinks
             with what is said; right never changes shape. */}
         <div className="mt-14 grid gap-px overflow-hidden rounded-sm border border-line bg-line md:grid-cols-2">

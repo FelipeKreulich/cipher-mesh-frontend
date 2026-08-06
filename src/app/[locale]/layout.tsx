@@ -4,11 +4,13 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { CommandPalette } from "@/components/site/command-palette";
 import { RatchetField } from "@/components/site/ratchet-field";
 import { Footer } from "@/components/site/footer";
 import { Header } from "@/components/site/header";
 import { routing } from "@/i18n/routing";
 import { site } from "@/lib/site";
+import { paletteData } from "@/lib/palette";
 
 import "../globals.css";
 
@@ -66,6 +68,13 @@ export async function generateMetadata({
       languages: Object.fromEntries(
         routing.locales.map((value) => [value, `/${value}`]),
       ),
+      // Declared on every page, not just the changelog: a reader should be able
+      // to subscribe from wherever they happen to have landed.
+      types: {
+        "application/atom+xml": [
+          { url: "/changelog.xml", title: `${site.name} releases` },
+        ],
+      },
     },
     openGraph: {
       type: "website",
@@ -119,6 +128,9 @@ export default async function LocaleLayout({
           <Header />
           <main id="main">{children}</main>
           <Footer />
+          {/* Ctrl+K, on every page. Its contents are assembled on the server so
+              opening it costs no request. */}
+          <CommandPalette data={await paletteData()} />
         </NextIntlClientProvider>
       </body>
     </html>

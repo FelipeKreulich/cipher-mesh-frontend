@@ -93,6 +93,32 @@ export function parseChangelog(markdown: string): Release[] {
   return releases.filter((entry) => entry.changes.length > 0);
 }
 
+/**
+ * When each version was published, from npm.
+ *
+ * The changelog itself carries no dates — deliberately, since a hand-written
+ * date is one more thing to get wrong — but a feed needs them, and the registry
+ * already knows precisely. Returns an empty map rather than throwing: a feed
+ * with approximate dates beats no feed.
+ */
+export async function releaseDates(): Promise<Map<string, string>> {
+  try {
+    const res = await fetch("https://registry.npmjs.org/ciphermesh", {
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return new Map();
+
+    const data = (await res.json()) as { time?: Record<string, string> };
+    const entries = Object.entries(data.time ?? {}).filter(
+      ([version]) => !["created", "modified"].includes(version),
+    );
+    return new Map(entries);
+  } catch {
+    return new Map();
+  }
+}
+
 export async function changelog(): Promise<{
   releases: Release[];
   live: boolean;

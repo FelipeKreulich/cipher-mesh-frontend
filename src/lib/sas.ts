@@ -20,22 +20,46 @@
 const DOMAIN = "CipherMesh-SAS-v1";
 
 /**
- * Illustrative 32-byte keys. Fixed rather than random so the page renders the
- * same for everyone, and so the server and the browser agree.
+ * Illustrative 32-byte keys, derived from their own labels.
+ *
+ * They were pasted as hex literals at first, which was a mistake for a reason
+ * that has nothing to do with cryptography: three 64-character hex strings, one
+ * of them named `you`, look exactly like leaked private keys, and a secret
+ * scanner is right to say so. An alert that is always there and always wrong
+ * teaches people to close alerts without reading them, which is worse than the
+ * thing the scanner was watching for.
+ *
+ * Deriving them from a readable label leaves nothing high-entropy in the
+ * repository, keeps the values fixed so the server and the browser agree, and
+ * makes what they are obvious from the code rather than from a comment.
  */
 export const DEMO_KEYS = {
-  you: hex("3a7f21c95e08b4d6112f8a03cd47e95b6208fa71d3c40e8b95a6172ce03d84f9"),
-  peer: hex("c14b90e7f2a3586d0be49172c8f5a0347d61b28ef903c45a17e6208b3fd7c951"),
+  you: demoKey("example key: you"),
+  peer: demoKey("example key: rita"),
   /** The key a machine in the middle would present to each side instead. */
-  middle: hex(
-    "82e5f13ac07b9d4628fa5061c3e7942bd05a86f371c2408e9b6d5137af204ce8",
-  ),
+  middle: demoKey("example key: interceptor"),
 } as const;
 
-function hex(value: string): Uint8Array {
-  const bytes = new Uint8Array(value.length / 2);
+/**
+ * Thirty-two deterministic bytes from a string, via FNV-1a and xorshift.
+ *
+ * Not a key derivation function and not trying to be — nothing here protects
+ * anything. It exists to produce stable, well-spread bytes for a picture, using
+ * arithmetic simple enough to read in one sitting.
+ */
+function demoKey(label: string): Uint8Array {
+  let state = 0x811c9dc5;
+  for (let i = 0; i < label.length; i++) {
+    state = Math.imul(state ^ label.charCodeAt(i), 0x01000193) >>> 0;
+  }
+
+  const bytes = new Uint8Array(32);
   for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = Number.parseInt(value.slice(i * 2, i * 2 + 2), 16);
+    state ^= (state << 13) >>> 0;
+    state ^= state >>> 17;
+    state ^= (state << 5) >>> 0;
+    state >>>= 0;
+    bytes[i] = state & 0xff;
   }
   return bytes;
 }

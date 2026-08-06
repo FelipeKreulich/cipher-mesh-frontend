@@ -56,7 +56,8 @@
     "cta": "Start chatting",
     "ctaSecondary": "Read the code",
     "copy": "Copy",
-    "copied": "Copied"
+    "copied": "Copied",
+    "palette": "search everything — sections, all 67 commands, every release"
   },
   "proof": {
     "prompt": "ciphermesh --version",
@@ -420,7 +421,11 @@
     "npm": "npm",
     "terms": "Hub terms",
     "security": "Security policy",
-    "rights": "MIT licensed. Use it for good things."
+    "rights": "MIT licensed. Use it for good things.",
+    "status": "Status",
+    "feed": "RSS",
+    "commands": "Commands",
+    "changelog": "Changelog"
   },
   "commands": {
     "meta": {
@@ -464,5 +469,39 @@
     "release": "release notes →",
     "note": "Read from the repository's CHANGELOG at build time, so this page cannot disagree with it. Older versions and the full commit history live in the",
     "releases": "releases"
+  },
+  "status": {
+    "meta": {
+      "title": "Status",
+      "description": "Whether the CipherMesh hub and the data this site reads are healthy right now."
+    },
+    "prompt": "ciphermesh --doctor",
+    "title": "Is anything broken?",
+    "overall": {
+      "ok": "everything measured here is answering",
+      "degraded": "something is not answering",
+      "unknown": "not enough to say"
+    },
+    "checks": {
+      "relay": "relay",
+      "npm": "published version",
+      "commands": "commands reference",
+      "changelog": "changelog"
+    },
+    "notMeasured": "Measured from this server, at the moment you loaded the page — nothing here is cached. Two things it cannot check: the WebSocket upgrade itself, which needs a real handshake rather than an HTTP request, and the certificate.",
+    "monitor": "Both of those are watched every ten minutes from GitHub rather than from the machine they watch, because a monitor hosted on the box it is monitoring dies with it:",
+    "privacy": "The relay line reports a range, never an exact count. An exact live number would let anyone reloading this page watch individual people arrive and leave — which is precisely the metadata the relay exists to withhold."
+  },
+  "palette": {
+    "title": "Search",
+    "description": "Jump to a section, a command, or a release.",
+    "placeholder": "Type to search…",
+    "empty": "Nothing matches that.",
+    "groups": {
+      "sections": "Sections",
+      "commands": "Commands",
+      "releases": "Releases"
+    },
+    "footer": "ctrl+k to open"
   }
 }
