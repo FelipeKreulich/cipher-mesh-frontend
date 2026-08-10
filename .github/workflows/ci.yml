@@ -40,3 +40,8 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # Bundle size only ever grows by accident, one defensible import at a
+      # time. This is the step that turns that into a decision.
+      - name: Bundle budget
+        run: npm run bundle:check
