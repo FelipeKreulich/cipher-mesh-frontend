@@ -28,7 +28,86 @@
     "skipToContent": "Saltar para o conteúdo",
     "language": "Idioma",
     "commands": "Comandos",
-    "changelog": "Alterações"
+    "changelog": "Alterações",
+    "backToHome": "Voltar ao início",
+    "features": "Funcionalidades",
+    "gettingStarted": "Começar",
+    "downloads": "Downloads",
+    "advisories": "Avisos"
+  },
+  "pages": {
+    "security": {
+      "prompt": "ciphermesh --security",
+      "title": "Segurança, sem argumento de venda",
+      "lead": "O que o CipherMesh protege, o que não consegue proteger, e onde confirmar as afirmações antes de dependeres dele."
+    },
+    "gettingStarted": {
+      "prompt": "ciphermesh --getting-started",
+      "title": "Do zero até uma conversa real",
+      "lead": "Escolhe um modelo de ligação, inicia o cliente, confirma quem está do outro lado e torna a sala privada quando precisares."
+    },
+    "features": {
+      "prompt": "ciphermesh --features",
+      "title": "Tudo à volta da mensagem cifrada",
+      "lead": "As funcionalidades de terminal, os controlos de segurança e as extensões locais que tornam o CipherMesh prático no dia a dia."
+    },
+    "support": {
+      "prompt": "ciphermesh --thanks",
+      "title": "Ajuda a manter o CipherMesh a funcionar",
+      "lead": "O CipherMesh é gratuito e de código aberto. Um café voluntário ajuda a pagar o hub público e o tempo de manutenção."
+    },
+    "downloads": {
+      "prompt": "ciphermesh --verify-download",
+      "title": "Sabe o que estás prestes a correr",
+      "lead": "Usa um caminho de distribuição publicado, e sabe exatamente que verificação o projeto fornece — e não fornece — hoje.",
+      "methods": {
+        "npm": {
+          "label": "registo de pacotes",
+          "name": "Instala pelo npm",
+          "body": "O pacote atual é publicado como ciphermesh. Confirma o nome e a versão antes de o correres.",
+          "command": "npx ciphermesh@latest"
+        },
+        "release": {
+          "label": "release do GitHub",
+          "name": "Usa um binário pré-compilado",
+          "body": "As releases têm binários autónomos para as arquiteturas macOS e Linux suportadas.",
+          "command": "gh release download --repo FelipeKreulich/secret-chat-lan"
+        },
+        "docker": {
+          "label": "imagem de contentor",
+          "name": "Corre o relay com Docker",
+          "body": "A imagem GHCR publicada serve para alojar um relay, não para correr o cliente interativo.",
+          "command": "docker pull ghcr.io/felipekreulich/secret-chat-lan:latest"
+        },
+        "source": {
+          "label": "código-fonte",
+          "name": "Inspeciona e corre a partir do código",
+          "body": "Clona o repositório quando queres ler o código ou reproduzir a instalação localmente.",
+          "command": "git clone https://github.com/FelipeKreulich/secret-chat-lan.git"
+        }
+      },
+      "limits": {
+        "label": "limite importante",
+        "title": "Ainda não há assinaturas de releases publicadas",
+        "body": "As releases GitHub e a fórmula Homebrew têm checksums onde os respetivos ecossistemas os pedem, mas o CipherMesh ainda não publica um manifesto de release assinado ou checksums separados para cada asset. Esta página não afirma o contrário.",
+        "cta": "Inspecionar a última release"
+      }
+    },
+    "advisories": {
+      "prompt": "ciphermesh --security-advisories",
+      "title": "Avisos de segurança",
+      "lead": "Um único sítio para versões afetadas, correções e orientação de atualização quando uma falha de segurança é divulgada.",
+      "current": {
+        "label": "estado atual",
+        "title": "Ainda não há avisos públicos listados aqui",
+        "body": "Isto não afirma que não existam vulnerabilidades. Quer dizer que ainda não foi publicado nenhum aviso público. Reporta problemas de segurança em privado; os avisos públicos indicarão as versões afetadas e a correção.",
+        "list": "Ver avisos no GitHub",
+        "report": "Reportar vulnerabilidade em privado"
+      }
+    },
+    "explore": {
+      "title": "Continua a explorar"
+    }
   },
   "hero": {
     "prompt": "cat o-que-o-servidor-ve",
@@ -140,7 +219,96 @@
       "moderate": "Moderar uma conversa",
       "hand": "Entregar conteúdo que não existe em forma legível"
     },
-    "footnote": "As salas existem apenas enquanto lá estiver alguém. Quando a última pessoa sai, a sala e tudo o que lá foi dito desaparecem — não há nada para entregar depois."
+    "footnote": "As salas existem apenas enquanto lá estiver alguém. Quando a última pessoa sai, a sala e tudo o que lá foi dito desaparecem — não há nada para entregar depois.",
+    "map": {
+      "content": {
+        "label": "conteúdo da mensagem",
+        "name": "Selado para o relay",
+        "body": "As mensagens e anexos são cifrados ponta a ponta. O relay encaminha um envelope, não texto legível."
+      },
+      "identity": {
+        "label": "quem está ligado",
+        "name": "Uma chave precisa de ser confirmada",
+        "body": "Uma alcunha é apenas uma etiqueta. Confirma o código de segurança antes de confiares na chave por trás dela."
+      },
+      "metadata": {
+        "label": "o que continua a viajar",
+        "name": "O momento não é conteúdo",
+        "body": "O relay continua a precisar de um endereço e consegue observar o momento e tamanhos em baldes. Cifrar não apaga isso."
+      }
+    }
+  },
+  "setup": {
+    "prompt": "ciphermesh --choose",
+    "title": "Escolhe a configuração que serve a tua situação",
+    "lead": "Não existe uma predefinição privada para toda a gente. Escolhe o caminho que corresponde ao sítio onde estás e àquilo em que precisas de confiar.",
+    "choose": "Escolher este caminho",
+    "options": {
+      "try": {
+        "name": "Quero apenas experimentar",
+        "body": "Liga-te ao hub público. Sem conta e sem instalação permanente; serve para perceberes o cliente."
+      },
+      "lan": {
+        "name": "Estamos na mesma rede",
+        "body": "Usa P2P. Os peers encontram-se por mDNS na LAN, por isso não há relay no caminho."
+      },
+      "internet": {
+        "name": "Precisamos de falar pela internet",
+        "body": "Usa um relay com Tailscale quando precisas de ligar sem abrir portas para a internet."
+      },
+      "own": {
+        "name": "Quero que o relay seja meu",
+        "body": "Corre o teu relay. É o caminho certo quando a disponibilidade e o controlo importam mais do que uma demonstração de um minuto."
+      }
+    },
+    "guide": {
+      "label": "mostra-me o primeiro comando certo",
+      "paths": {
+        "hub": {
+          "name": "Hub público",
+          "body": "A forma mais rápida de conhecer o cliente e a comunidade.",
+          "command": "npx ciphermesh@latest"
+        },
+        "lan": {
+          "name": "Mesma LAN",
+          "body": "Sem relay: os peers descobrem-se directamente na rede local.",
+          "command": "npx ciphermesh p2p"
+        },
+        "internet": {
+          "name": "Pela internet",
+          "body": "Usa Tailscale para chegar ao outro lado sem abrir portas no router.",
+          "command": "npx ciphermesh server"
+        },
+        "selfhost": {
+          "name": "Alojar tu",
+          "body": "Corre o relay tu mesmo quando o controlo e a disponibilidade importam.",
+          "command": "docker compose up -d"
+        }
+      }
+    }
+  },
+  "evidence": {
+    "prompt": "ciphermesh --verify-claim",
+    "title": "Não aceites a palavra da página",
+    "lead": "As afirmações úteis têm um sítio concreto para inspecionar. Lê o desenho, os limites, ou o código que os implementa.",
+    "open": "Abrir a evidência",
+    "items": {
+      "protocol": {
+        "label": "documento de desenho",
+        "name": "Ler o protocolo",
+        "body": "Acordo de chaves, ratchet, padding e formatos de mensagem estão documentados num único sítio."
+      },
+      "limits": {
+        "label": "política de segurança",
+        "name": "Ler os limites",
+        "body": "O modelo de ameaças inclui aquilo que cifrar não esconde e aquilo que o relay continua a ter de ver."
+      },
+      "source": {
+        "label": "repositório do código",
+        "name": "Ler a implementação",
+        "body": "O cliente, relay, testes e histórico de releases são públicos. Faz um fork ou corre tu mesmo."
+      }
+    }
   },
   "verify": {
     "prompt": "ciphermesh /verify",
@@ -288,7 +456,32 @@
       }
     },
     "demoAlt": "O cliente do CipherMesh a correr num terminal: a lista de salas, uma conversa cifrada e a barra de comandos.",
-    "selfhost": "Preferes o teu próprio? O repositório traz uma configuração Docker que obtém certificado Let's Encrypt automaticamente."
+    "selfhost": "Preferes o teu próprio? O repositório traz uma configuração Docker que obtém certificado Let's Encrypt automaticamente.",
+    "releases": "Ver releases pré-compiladas",
+    "selfhostCta": "Ler o guia para alojar"
+  },
+  "firstFive": {
+    "prompt": "ciphermesh --first-five",
+    "title": "Os teus primeiros cinco minutos",
+    "lead": "Um caminho curto para uma conversa real: inicia o cliente, encontra alguém, confirma a chave e depois torna a sala privada.",
+    "steps": {
+      "run": {
+        "name": "Inicia o cliente",
+        "body": "Node 20 ou mais recente basta. Nada te pede para criares uma conta."
+      },
+      "join": {
+        "name": "Encontrem-se numa sala",
+        "body": "Usa o hub público para testar depressa, ou aponta os dois clientes para um relay que controlas."
+      },
+      "verify": {
+        "name": "Confirma o código de segurança",
+        "body": "Usa outro canal para comparar o código antes de confiares em quem tem a outra chave."
+      },
+      "private": {
+        "name": "Cria uma sala privada",
+        "body": "Cria uma sala protegida por palavra-passe quando estiveres pronto; a palavra-passe fica nos clientes."
+      }
+    }
   },
   "community": {
     "prompt": "ciphermesh --hub ciphermesh.de",
@@ -300,6 +493,40 @@
     },
     "connectTitle": "Escreve isto no prompt",
     "connectNote": "É este o processo de entrada, por inteiro. O hub está sempre ligado, portanto ninguém tem de combinar quem levanta o servidor.",
+    "guide": {
+      "join": {
+        "name": "Entra na sala pública",
+        "command": "/join general",
+        "body": "Diz olá na general, ou usa qualquer nome de sala que tenhas combinado com outra pessoa."
+      },
+      "private": {
+        "name": "Torna a sala privada",
+        "command": "/create nossa-sala palavra-passe",
+        "body": "Usa uma palavra-passe numa sala que não deva estar aberta a toda a gente no hub."
+      },
+      "invite": {
+        "name": "Chama alguém",
+        "command": "/invite",
+        "body": "Envia a string de convite ou o QR por outro canal para a pessoa cair na sala certa."
+      }
+    },
+    "guide": {
+      "join": {
+        "name": "Entra na sala pública",
+        "command": "/join general",
+        "body": "Diz olá na general, ou usa qualquer nome de sala que tenhas combinado com outra pessoa."
+      },
+      "private": {
+        "name": "Torna a sala privada",
+        "command": "/create nossa-sala palavra-passe",
+        "body": "Usa uma palavra-passe numa sala que não deva estar aberta a toda a gente no hub."
+      },
+      "invite": {
+        "name": "Chama alguém",
+        "command": "/invite",
+        "body": "Envia a string de convite ou o QR por outro canal para a pessoa cair na sala certa."
+      }
+    },
     "items": {
       "open": {
         "name": "Salas que qualquer um abre",
@@ -453,6 +680,10 @@
     },
     "copy": "Copiar",
     "copied": "copiado",
+    "copyLink": "Copiar ligação para este comando",
+    "copiedLink": "ligação copiada",
+    "copyLink": "Copiar ligação para este comando",
+    "copiedLink": "ligação copiada",
     "anchor": "Ligação para {name}",
     "generated": "Esta lista não é escrita à mão. É gerada a partir das etiquetas case nos dois controladores do cliente, portanto um comando não pode existir sem aparecer aqui, e o funcionar offline é lido do controlador P2P em vez de ser afirmado:"
   },
@@ -490,7 +721,11 @@
     },
     "notMeasured": "Medido a partir deste servidor, no momento em que abriste a página — nada aqui está em cache. Duas coisas que não consegue verificar: o upgrade WebSocket em si, que precisa de um handshake a sério e não de um pedido HTTP, e o certificado.",
     "monitor": "Essas duas são vigiadas de dez em dez minutos a partir do GitHub, e não da máquina que vigiam, porque um monitor alojado na máquina que monitoriza morre com ela:",
-    "privacy": "A linha do relay dá um intervalo, nunca uma contagem exata. Um número exato ao vivo deixaria qualquer pessoa a recarregar esta página ver gente a chegar e a sair — que é precisamente o metadado que o relay existe para não revelar."
+    "privacy": "A linha do relay dá um intervalo, nunca uma contagem exata. Um número exato ao vivo deixaria qualquer pessoa a recarregar esta página ver gente a chegar e a sair — que é precisamente o metadado que o relay existe para não revelar.",
+    "checkedAt": "confirmado aqui às {time}",
+    "diagnoseLabel": "quando a tua própria ligação falha",
+    "diagnoseTitle": "Corre o diagnóstico por camadas do cliente",
+    "diagnoseBody": "A página de estado consegue dizer-te ao que este site chega. /doctor verifica o teu endereço, DNS, TCP, TLS e caminho de protocolo, e explica a primeira falha que encontra."
   },
   "palette": {
     "title": "Pesquisa",

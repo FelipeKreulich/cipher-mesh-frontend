@@ -49,6 +49,7 @@ describe("messages", () => {
       "count",
       "query",
       "name",
+      "time",
     ]);
     const used = new Set<string>();
 

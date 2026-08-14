@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 const CAN = ["route", "limits", "ban", "offline"] as const;
 const CANNOT = ["read", "delete", "moderate", "hand"] as const;
+const MAP = ["content", "identity", "metadata"] as const;
 
 export function Security() {
   const t = useTranslations("security");
@@ -46,6 +47,22 @@ export function Security() {
       </div>
 
       <p className="mt-6 max-w-3xl text-sm text-faint">{t("footnote")}</p>
+
+      <div className="mt-10 grid gap-px overflow-hidden rounded-sm border border-line bg-line md:grid-cols-3">
+        {MAP.map((key, index) => (
+          <Reveal key={key} delay={index * 0.06} className="bg-panel p-6">
+            <p className="font-mono text-[11px] text-faint">
+              {t(`map.${key}.label`)}
+            </p>
+            <h3 className="mt-3 font-display text-base tracking-tight text-ink">
+              {t(`map.${key}.name`)}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-dim">
+              {t(`map.${key}.body`)}
+            </p>
+          </Reveal>
+        ))}
+      </div>
     </Section>
   );
 }

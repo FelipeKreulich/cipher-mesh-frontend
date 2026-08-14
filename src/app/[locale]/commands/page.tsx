@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { CommandBrowser } from "@/components/commands/command-browser";
+import { BackHome } from "@/components/site/back-home";
 import { Reveal } from "@/components/site/reveal";
 import { routing } from "@/i18n/routing";
 import { commandReference } from "@/lib/commands";
@@ -66,8 +67,9 @@ export default async function CommandsPage({
 
   return (
     <div className="shell py-16 sm:py-24">
+      <BackHome />
       <Reveal>
-        <p className="prompt">{t("prompt")}</p>
+        <p className="prompt mt-8">{t("prompt")}</p>
         <h1 className="mt-5 max-w-3xl font-display text-section leading-[1.06] tracking-tight text-balance text-ink">
           {t("title")}
         </h1>

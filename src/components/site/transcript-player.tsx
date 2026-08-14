@@ -67,6 +67,7 @@ const motionOnServer = () => false;
 
 export function TranscriptPlayer({ replayLabel }: { replayLabel: string }) {
   const hostRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
   const runRef = useRef(0);
 
   const [shown, setShown] = useState(0);
@@ -156,23 +157,34 @@ export function TranscriptPlayer({ replayLabel }: { replayLabel: string }) {
   const pending = !reduce && typed ? TRANSCRIPT[shown] : null;
   const settled = reduce || done;
 
+  // A transcript gets much taller once its terminal rows wrap on a phone. Keep
+  // the active line in view while it plays, but leave the completed reduced-
+  // motion version at the top so it can be read like ordinary scrollback.
+  useEffect(() => {
+    if (reduce) return;
+    const viewport = viewportRef.current;
+    if (viewport) viewport.scrollTop = viewport.scrollHeight;
+  }, [shown, typed, reduce]);
+
   return (
     <div ref={hostRef} className="not-prose">
       <div className="overflow-hidden rounded-lg border border-line bg-panel">
-        <div className="flex items-center gap-2 border-b border-line bg-panel-2 px-4 py-2.5">
+        <div className="flex min-w-0 items-center gap-2 border-b border-line bg-panel-2 px-3 py-2.5 sm:px-4">
           <span className="size-2.5 rounded-full bg-line-2" />
           <span className="size-2.5 rounded-full bg-line-2" />
           <span className="size-2.5 rounded-full bg-line-2" />
-          <span className="ml-2 font-mono text-xs text-faint">
+          <span className="ml-2 truncate font-mono text-xs text-faint">
             ciphermesh — #general
           </span>
         </div>
 
         <div
           aria-hidden="true"
-          className="h-[27rem] overflow-x-auto overflow-y-hidden px-4 py-3 font-mono text-[0.72rem] leading-[1.65] sm:text-[0.8rem]"
+          ref={viewportRef}
+          data-slot="transcript-viewport"
+          className="h-[26rem] touch-pan-y overflow-x-hidden overflow-y-auto overscroll-contain px-3 py-3 font-mono text-[0.72rem] leading-[1.65] sm:h-[27rem] sm:px-4 sm:text-[0.8rem]"
         >
-          <div className="flex min-h-full w-max min-w-full flex-col justify-end">
+          <div className="flex min-h-full min-w-0 flex-col justify-end">
             {visible.map((frame, i) => (
               <Row key={i} frame={frame} sas={sas} art={art} />
             ))}
@@ -229,7 +241,7 @@ function Row({
 
     case "shell":
       return (
-        <div className="whitespace-pre text-ink">
+        <div className="break-words whitespace-pre-wrap text-ink sm:whitespace-pre">
           <span className="text-faint">{PROMPT}</span>
           {body}
         </div>
@@ -237,7 +249,7 @@ function Row({
 
     case "input":
       return (
-        <div className="whitespace-pre text-signal-soft">
+        <div className="break-words whitespace-pre-wrap text-signal-soft sm:whitespace-pre">
           <span className="text-faint">&gt; </span>
           {body}
         </div>
@@ -245,7 +257,7 @@ function Row({
 
     case "system":
       return (
-        <div className="whitespace-pre text-ink">
+        <div className="break-words whitespace-pre-wrap text-ink sm:whitespace-pre">
           {at}
           <span className="text-faint">* </span>
           {body}
@@ -261,7 +273,7 @@ function Row({
 
     case "event":
       return (
-        <div className="font-semibold whitespace-pre text-signal-soft">
+        <div className="font-semibold break-words whitespace-pre-wrap text-signal-soft sm:whitespace-pre">
           {at}✦ {body}
         </div>
       );
@@ -284,7 +296,7 @@ function Row({
 
     case "in":
       return (
-        <div className="whitespace-pre text-ink">
+        <div className="break-words whitespace-pre-wrap text-ink sm:whitespace-pre">
           {at}
           <span className="text-wire">{frame.nick}</span>
           {frame.verified ? <span className="text-[#4ade80]"> ✓</span> : null}
@@ -296,7 +308,7 @@ function Row({
     case "out":
       // The client pushes your own messages to the right edge of the pane.
       return (
-        <div className="text-right whitespace-pre text-ink">
+        <div className="text-left break-words whitespace-pre-wrap text-ink sm:text-right sm:whitespace-pre">
           <span className="font-semibold">{frame.nick}</span>
           <span className="text-faint">: </span>
           {frame.text} <span className="text-faint">[{frame.at}]</span>
@@ -305,7 +317,9 @@ function Row({
 
     case "art":
       return (
-        <div className="py-1 whitespace-pre text-faint">{art.join("\n")}</div>
+        <div className="overflow-x-auto py-1 text-[0.68rem] whitespace-pre text-faint sm:text-inherit">
+          {art.join("\n")}
+        </div>
       );
 
     default:

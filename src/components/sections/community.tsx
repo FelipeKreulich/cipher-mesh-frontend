@@ -78,6 +78,28 @@ export function Community() {
         ))}
       </div>
 
+      <ol className="mt-10 grid gap-px overflow-hidden rounded-sm border border-line bg-line md:grid-cols-3">
+        {(["join", "private", "invite"] as const).map((key, index) => (
+          <Reveal key={key} delay={index * 0.05} className="bg-panel p-6">
+            <li>
+              <p className="font-mono text-[11px] text-faint">
+                {String(index + 1).padStart(2, "0")}
+              </p>
+              <h3 className="mt-3 font-display text-base tracking-tight text-ink">
+                {t(`guide.${key}.name`)}
+              </h3>
+              <code className="mt-3 block overflow-x-auto font-mono text-sm whitespace-nowrap text-wire">
+                <span className="text-signal-soft select-none">$ </span>
+                {t(`guide.${key}.command`)}
+              </code>
+              <p className="mt-3 text-sm leading-relaxed text-dim">
+                {t(`guide.${key}.body`)}
+              </p>
+            </li>
+          </Reveal>
+        ))}
+      </ol>
+
       {/* What the hub is for, and what it is not. A service with no declared
           purpose reads as general-purpose infrastructure, and self-hosting is
           the honest answer for anyone who needs more than a meeting point.

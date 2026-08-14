@@ -17,9 +17,9 @@ import { site } from "@/lib/site";
  * `/commands` and `/changelog` too, where `#security` would scroll to nothing.
  */
 const GROUPS = [
-  { id: "product", keys: ["replay", "what", "controls", "plugins"] },
-  { id: "trust", keys: ["security", "verify", "limits", "versus"] },
-  { id: "join", keys: ["start", "community", "open", "support"] },
+  { id: "product", pages: ["features", "downloads"] },
+  { id: "trust", pages: ["security", "advisories"] },
+  { id: "join", pages: ["gettingStarted", "support"] },
   { id: "reference", pages: ["commands", "changelog"] },
 ] as const;
 
@@ -30,8 +30,8 @@ const GROUPS = [
  */
 const PRIMARY = [
   { key: "replay", href: "/#replay" },
-  { key: "security", href: "/#security" },
-  { key: "start", href: "/#start" },
+  { key: "security", href: "/security" },
+  { key: "gettingStarted", href: "/getting-started" },
   { key: "commands", href: "/commands" },
 ] as const;
 
@@ -74,10 +74,11 @@ export function Header() {
             groups={GROUPS.map((group) => ({
               id: group.id,
               label: t(`groups.${group.id}`),
-              items: ("pages" in group
-                ? group.pages.map((key) => ({ key, href: `/${key}` }))
-                : group.keys.map((key) => ({ key, href: `/#${key}` }))
-              ).map(({ key, href }) => ({ id: key, label: t(key), href })),
+              items: group.pages.map((key) => ({
+                id: key,
+                label: t(key),
+                href: `/${key}`,
+              })),
             }))}
           />
           <LanguageSwitcher label={t("language")} />

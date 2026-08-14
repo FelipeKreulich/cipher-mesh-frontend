@@ -26,6 +26,13 @@ import { fileURLToPath } from "node:url";
 const root = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const staticDir = join(root, ".next", "static");
 const budgetFile = join(root, "bundle-budget.json");
+const routeManifests = {
+  home: "[locale]/page",
+  security: "[locale]/security/page",
+  gettingStarted: "[locale]/getting-started/page",
+  features: "[locale]/features/page",
+  commands: "[locale]/commands/page",
+};
 
 function walk(dir) {
   const out = [];
@@ -72,11 +79,49 @@ const measured = files
 const totalGzip = measured.reduce((sum, f) => sum + f.gzip, 0);
 const kib = (bytes) => `${(bytes / 1024).toFixed(1)} KiB`;
 
+function routeBytes(route) {
+  const manifest = join(
+    root,
+    ".next",
+    "server",
+    "app",
+    `${route}_client-reference-manifest.js`,
+  );
+  try {
+    const source = readFileSync(manifest, "utf-8");
+    // Turbopack initialises the global first and assigns the JSON on a second
+    // line, so the last assignment is the manifest rather than the bootstrap.
+    const json = source
+      .slice(source.lastIndexOf("= ") + 2)
+      .replace(/;\s*$/, "");
+    const data = JSON.parse(json);
+    const chunks = new Set(
+      Object.values(data.clientModules).flatMap((module) => module.chunks),
+    );
+    return [...chunks].reduce((sum, chunk) => {
+      const file = join(root, ".next", chunk.replace(/^\/_next\//, ""));
+      return sum + gzipSync(readFileSync(file), { level: 9 }).length;
+    }, 0);
+  } catch {
+    return null;
+  }
+}
+
 console.log(`Client chunks: ${measured.length}`);
 console.log(`Total gzipped: ${kib(totalGzip)}`);
 console.log("\nLargest:");
 for (const f of measured.slice(0, 5)) {
   console.log(`  ${kib(f.gzip).padStart(10)}  ${f.file}`);
+}
+
+if (process.argv.includes("--routes")) {
+  console.log("\nRoute client payloads (gzipped, shared chunks included):");
+  for (const [name, route] of Object.entries(routeManifests)) {
+    const bytes = routeBytes(route);
+    console.log(
+      `  ${name.padEnd(16)} ${bytes === null ? "unavailable" : kib(bytes)}`,
+    );
+  }
 }
 
 if (process.argv.includes("--print")) {
