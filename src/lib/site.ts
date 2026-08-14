@@ -34,8 +34,8 @@ export const site = {
  */
 export const stats = {
   /** Fallback only. The live value comes from npm — see npmVersion(). */
-  version: "2.11.0",
-  tests: 540,
+  version: "2.12.0",
+  tests: 562,
   /**
    * Fallbacks only. The live values come from the generated command list — see
    * `commandReference()`. They were hand-written until 2026-08-06 and had drifted
