@@ -79,8 +79,9 @@ export function CommandBrowser({ groups }: { groups: CommandGroup[] }) {
 
   const total = shown.reduce((sum, group) => sum + group.commands.length, 0);
 
-  const copy = (name: string) => {
-    navigator.clipboard?.writeText(name).then(
+  const copy = (name: string, id: string) => {
+    const link = `${window.location.origin}${window.location.pathname}#${id}`;
+    navigator.clipboard?.writeText(link).then(
       () => {
         setCopied(name);
         setTimeout(() => setCopied((c) => (c === name ? null : c)), 1400);
@@ -181,8 +182,8 @@ export function CommandBrowser({ groups }: { groups: CommandGroup[] }) {
                       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
                         <button
                           type="button"
-                          onClick={() => copy(command.name)}
-                          title={t("copy")}
+                          onClick={() => copy(command.name, id)}
+                          title={t("copyLink")}
                           className="group/name font-mono text-sm font-semibold text-signal-soft transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
                         >
                           <Highlight text={command.name} needle={needle} />
@@ -222,7 +223,7 @@ export function CommandBrowser({ groups }: { groups: CommandGroup[] }) {
                           role="status"
                           className="mt-1.5 font-mono text-xs text-wire"
                         >
-                          {t("copied")}
+                          {t("copiedLink")}
                         </p>
                       ) : null}
                     </li>

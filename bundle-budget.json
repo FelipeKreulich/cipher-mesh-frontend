@@ -1,7 +1,7 @@
 {
   "_comment": "Ceiling on the client JavaScript this site ships, gzipped, summed per file the way a browser downloads them. Checked by scripts/check-bundle-size.mjs in CI. Raising it is allowed and expected occasionally — it just has to be a deliberate line in a diff with a reason, rather than a number that drifted.",
-  "measuredAt": "2026-08-10",
-  "measuredBytes": 342447,
-  "totalGzipBytes": 378880,
-  "_headroom": "~10% over the measurement above: loose enough that a dependency bump or a minifier change does not fail the build on noise, tight enough to catch a regression the size of the 133 KB the ratchet-backdrop change removed."
+  "measuredAt": "2026-08-14",
+  "measuredBytes": 1229796,
+  "totalGzipBytes": 430000,
+  "_headroom": "~10% over the 391371 B measurement above. The route split added security, setup, feature and support entry chunks; per-route payloads are printed by npm run bundle:routes so that growth is visible rather than hidden in this total."
 }

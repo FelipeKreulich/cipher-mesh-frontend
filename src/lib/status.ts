@@ -24,6 +24,11 @@ export type Check = {
   detail: string;
 };
 
+export type StatusSnapshot = {
+  checks: Check[];
+  checkedAt: Date;
+};
+
 async function presence(): Promise<Check> {
   const url = process.env.PRESENCE_URL;
   if (!url) {
@@ -87,10 +92,15 @@ async function sources(): Promise<Check[]> {
 }
 
 export async function statusChecks(): Promise<Check[]> {
+  return (await statusSnapshot()).checks;
+}
+
+/** A single timestamp makes clear that all checks belong to one page load. */
+export async function statusSnapshot(): Promise<StatusSnapshot> {
   const [relay, npm, rest] = await Promise.all([
     presence(),
     published(),
     sources(),
   ]);
-  return [relay, npm, ...rest];
+  return { checks: [relay, npm, ...rest], checkedAt: new Date() };
 }

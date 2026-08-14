@@ -28,7 +28,86 @@
     "skipToContent": "Skip to content",
     "language": "Language",
     "commands": "Commands",
-    "changelog": "Changelog"
+    "changelog": "Changelog",
+    "backToHome": "Back to home",
+    "features": "Features",
+    "gettingStarted": "Get started",
+    "downloads": "Downloads",
+    "advisories": "Advisories"
+  },
+  "pages": {
+    "security": {
+      "prompt": "ciphermesh --security",
+      "title": "Security, without the sales pitch",
+      "lead": "What CipherMesh protects, what it cannot protect, and where to inspect the claims before you rely on it."
+    },
+    "gettingStarted": {
+      "prompt": "ciphermesh --getting-started",
+      "title": "Get from zero to a real conversation",
+      "lead": "Choose a connection model, start the client, verify who is on the other end, and make the room private when you need to."
+    },
+    "features": {
+      "prompt": "ciphermesh --features",
+      "title": "Everything around the encrypted message",
+      "lead": "The terminal features, safety controls and local extensions that make CipherMesh practical to use every day."
+    },
+    "support": {
+      "prompt": "ciphermesh --thanks",
+      "title": "Help keep CipherMesh running",
+      "lead": "CipherMesh is free and open source. A voluntary coffee helps cover the public hub and the time spent maintaining it."
+    },
+    "downloads": {
+      "prompt": "ciphermesh --verify-download",
+      "title": "Know what you are about to run",
+      "lead": "Use a published distribution path, and know exactly which verification the project does and does not provide today.",
+      "methods": {
+        "npm": {
+          "label": "package registry",
+          "name": "Install from npm",
+          "body": "The current package is published as ciphermesh. Check the package name and version before you run it.",
+          "command": "npx ciphermesh@latest"
+        },
+        "release": {
+          "label": "GitHub release",
+          "name": "Use a prebuilt binary",
+          "body": "Releases contain standalone binaries for supported macOS and Linux architectures.",
+          "command": "gh release download --repo FelipeKreulich/secret-chat-lan"
+        },
+        "docker": {
+          "label": "container image",
+          "name": "Run the relay with Docker",
+          "body": "The published GHCR image is for hosting a relay, not for running the interactive client.",
+          "command": "docker pull ghcr.io/felipekreulich/secret-chat-lan:latest"
+        },
+        "source": {
+          "label": "source",
+          "name": "Inspect and run from source",
+          "body": "Clone the repository when you want to read the code or reproduce the installation locally.",
+          "command": "git clone https://github.com/FelipeKreulich/secret-chat-lan.git"
+        }
+      },
+      "limits": {
+        "label": "important limit",
+        "title": "No release signatures are published yet",
+        "body": "GitHub releases and the Homebrew formula carry checksums where their ecosystems require them, but CipherMesh does not currently publish a signed release manifest or detached checksums for every asset. Do not treat this page as claiming otherwise.",
+        "cta": "Inspect the latest release"
+      }
+    },
+    "advisories": {
+      "prompt": "ciphermesh --security-advisories",
+      "title": "Security advisories",
+      "lead": "A single place for affected versions, fixes and upgrade guidance when a security issue is disclosed.",
+      "current": {
+        "label": "current status",
+        "title": "No public advisories are listed here yet",
+        "body": "That is not a claim that no vulnerabilities exist. It means no public advisory has been published. Report suspected security problems privately; public advisories will point to the affected versions and fix.",
+        "list": "View GitHub advisories",
+        "report": "Report a vulnerability privately"
+      }
+    },
+    "explore": {
+      "title": "Keep exploring"
+    }
   },
   "hero": {
     "prompt": "cat what-the-server-sees",
@@ -140,7 +219,96 @@
       "moderate": "Moderate a conversation",
       "hand": "Hand over content that does not exist in readable form"
     },
-    "footnote": "Rooms exist only while someone is inside them. When the last person leaves, the room and everything said in it are gone — there is nothing to hand over later."
+    "footnote": "Rooms exist only while someone is inside them. When the last person leaves, the room and everything said in it are gone — there is nothing to hand over later.",
+    "map": {
+      "content": {
+        "label": "message content",
+        "name": "Sealed from the relay",
+        "body": "Messages and attachments are encrypted end to end. The relay forwards an envelope, not readable text."
+      },
+      "identity": {
+        "label": "who is connected",
+        "name": "A key needs checking",
+        "body": "A nickname is only a label. Compare the safety code before trusting the key behind it."
+      },
+      "metadata": {
+        "label": "what still travels",
+        "name": "Timing is not content",
+        "body": "The relay still needs an address and can observe timing and padded size buckets. Encryption does not erase that."
+      }
+    }
+  },
+  "setup": {
+    "prompt": "ciphermesh --choose",
+    "title": "Pick the setup that fits your situation",
+    "lead": "There is no universally private default. Pick the path that matches where you are and what you need to trust.",
+    "choose": "Choose this path",
+    "options": {
+      "try": {
+        "name": "I just want to try it",
+        "body": "Connect to the public hub. No account and no permanent installation; useful for getting a feel for the client."
+      },
+      "lan": {
+        "name": "We are on the same network",
+        "body": "Use P2P. Peers discover each other with mDNS on the LAN, so there is no relay in the path."
+      },
+      "internet": {
+        "name": "We need to talk over the internet",
+        "body": "Use a relay with Tailscale when you need reachability without opening ports to the internet."
+      },
+      "own": {
+        "name": "I want the relay to be mine",
+        "body": "Run your own relay. It is the right path when availability and control matter more than a one-minute demo."
+      }
+    },
+    "guide": {
+      "label": "show me the right first command",
+      "paths": {
+        "hub": {
+          "name": "Public hub",
+          "body": "The quickest way to see the client and meet the community.",
+          "command": "npx ciphermesh@latest"
+        },
+        "lan": {
+          "name": "Same LAN",
+          "body": "No relay: peers discover each other directly on the local network.",
+          "command": "npx ciphermesh p2p"
+        },
+        "internet": {
+          "name": "Over the internet",
+          "body": "Use Tailscale for reachability without opening router ports.",
+          "command": "npx ciphermesh server"
+        },
+        "selfhost": {
+          "name": "Self-host",
+          "body": "Run the relay yourself when control and availability matter.",
+          "command": "docker compose up -d"
+        }
+      }
+    }
+  },
+  "evidence": {
+    "prompt": "ciphermesh --verify-claim",
+    "title": "Do not take the page's word for it",
+    "lead": "The useful claims have somewhere concrete to inspect. Read the design, read the limits, or read the code that implements them.",
+    "open": "Open the evidence",
+    "items": {
+      "protocol": {
+        "label": "design document",
+        "name": "Read the protocol",
+        "body": "Key agreement, ratcheting, padding and the message formats are documented in one place."
+      },
+      "limits": {
+        "label": "security policy",
+        "name": "Read the limits",
+        "body": "The threat model includes what encryption cannot hide and what the relay must still see."
+      },
+      "source": {
+        "label": "source repository",
+        "name": "Read the implementation",
+        "body": "The client, relay, tests and release history are public. Fork it or run it yourself."
+      }
+    }
   },
   "start": {
     "prompt": "npx ciphermesh@latest",
@@ -161,7 +329,32 @@
       }
     },
     "demoAlt": "The CipherMesh client running in a terminal: a room list, an encrypted conversation and the command bar.",
-    "selfhost": "Prefer your own? The repository ships a Docker setup that gets a Let's Encrypt certificate automatically."
+    "selfhost": "Prefer your own? The repository ships a Docker setup that gets a Let's Encrypt certificate automatically.",
+    "releases": "Browse prebuilt releases",
+    "selfhostCta": "Read the self-hosting guide"
+  },
+  "firstFive": {
+    "prompt": "ciphermesh --first-five",
+    "title": "Your first five minutes",
+    "lead": "A small path to a real conversation: start the client, meet someone, verify the key, then make the room private.",
+    "steps": {
+      "run": {
+        "name": "Start the client",
+        "body": "Node 20 or newer is enough. Nothing asks you to create an account."
+      },
+      "join": {
+        "name": "Meet in a room",
+        "body": "Use the public hub for a quick test, or point both clients at a relay you control."
+      },
+      "verify": {
+        "name": "Compare the safety code",
+        "body": "Use another channel to compare the code before you trust who is holding the other key."
+      },
+      "private": {
+        "name": "Make a private room",
+        "body": "Create a password-protected room when you are ready; the password stays on the clients."
+      }
+    }
   },
   "community": {
     "prompt": "ciphermesh --hub ciphermesh.de",
@@ -173,6 +366,40 @@
     },
     "connectTitle": "Type this at the prompt",
     "connectNote": "That is the whole join flow. The hub is always on, so there is no need to coordinate who starts the server.",
+    "guide": {
+      "join": {
+        "name": "Join the public room",
+        "command": "/join general",
+        "body": "Say hello in general, or use any room name you have agreed with someone else."
+      },
+      "private": {
+        "name": "Make the room private",
+        "command": "/create our-room passphrase",
+        "body": "Use a password for a room that should not be open to everyone on the hub."
+      },
+      "invite": {
+        "name": "Bring someone in",
+        "command": "/invite",
+        "body": "Send the invite string or QR code through another channel so they land in the right room."
+      }
+    },
+    "guide": {
+      "join": {
+        "name": "Join the public room",
+        "command": "/join general",
+        "body": "Say hello in general, or use any room name you have agreed with someone else."
+      },
+      "private": {
+        "name": "Make the room private",
+        "command": "/create our-room passphrase",
+        "body": "Use a password for a room that should not be open to everyone on the hub."
+      },
+      "invite": {
+        "name": "Bring someone in",
+        "command": "/invite",
+        "body": "Send the invite string or QR code through another channel so they land in the right room."
+      }
+    },
     "items": {
       "open": {
         "name": "Rooms anyone can open",
@@ -453,6 +680,10 @@
     },
     "copy": "Copy",
     "copied": "copied",
+    "copyLink": "Copy a link to this command",
+    "copiedLink": "link copied",
+    "copyLink": "Copy a link to this command",
+    "copiedLink": "link copied",
     "anchor": "Link to {name}",
     "generated": "This list is not written by hand. It is generated from the case labels in the client's two controllers, so a command cannot exist without appearing here, and whether it works offline is read from the P2P controller rather than claimed:"
   },
@@ -490,7 +721,11 @@
     },
     "notMeasured": "Measured from this server, at the moment you loaded the page — nothing here is cached. Two things it cannot check: the WebSocket upgrade itself, which needs a real handshake rather than an HTTP request, and the certificate.",
     "monitor": "Both of those are watched every ten minutes from GitHub rather than from the machine they watch, because a monitor hosted on the box it is monitoring dies with it:",
-    "privacy": "The relay line reports a range, never an exact count. An exact live number would let anyone reloading this page watch individual people arrive and leave — which is precisely the metadata the relay exists to withhold."
+    "privacy": "The relay line reports a range, never an exact count. An exact live number would let anyone reloading this page watch individual people arrive and leave — which is precisely the metadata the relay exists to withhold.",
+    "checkedAt": "checked here at {time}",
+    "diagnoseLabel": "when your own connection fails",
+    "diagnoseTitle": "Run the client's layered diagnosis",
+    "diagnoseBody": "The status page can tell you what this site can reach. /doctor checks your own address, DNS, TCP, TLS and protocol path, then explains the first failure it finds."
   },
   "palette": {
     "title": "Search",

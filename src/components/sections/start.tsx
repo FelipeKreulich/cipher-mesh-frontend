@@ -83,6 +83,25 @@ export function Start() {
       </Reveal>
 
       <p className="mt-6 max-w-2xl text-sm text-faint">{t("selfhost")}</p>
+
+      <div className="mt-6 flex flex-wrap gap-3">
+        <a
+          href={site.releases}
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-sm border border-line px-4 py-2 font-mono text-xs text-dim transition-colors hover:border-wire hover:text-wire focus-visible:outline-none"
+        >
+          {t("releases")} →
+        </a>
+        <a
+          href={site.selfhostDocs}
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-sm border border-line px-4 py-2 font-mono text-xs text-dim transition-colors hover:border-signal-soft hover:text-signal-soft focus-visible:outline-none"
+        >
+          {t("selfhostCta")} →
+        </a>
+      </div>
     </Section>
   );
 }

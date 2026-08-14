@@ -16,6 +16,12 @@ const PAGES = [
   { path: "", changeFrequency: "weekly", priority: 1 },
   { path: "/commands", changeFrequency: "weekly", priority: 0.9 },
   { path: "/changelog", changeFrequency: "daily", priority: 0.7 },
+  { path: "/security", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/getting-started", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/features", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/support", changeFrequency: "monthly", priority: 0.5 },
+  { path: "/downloads", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/advisories", changeFrequency: "weekly", priority: 0.6 },
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Reveal } from "@/components/site/reveal";
+import { BackHome } from "@/components/site/back-home";
 import { routing } from "@/i18n/routing";
 import { site } from "@/lib/site";
-import { statusChecks, type Verdict } from "@/lib/status";
+import { statusSnapshot, type Verdict } from "@/lib/status";
 
 /**
  * The page people open when they already think something is broken.
@@ -57,15 +58,16 @@ export default async function StatusPage({
   setRequestLocale(locale);
 
   const t = await getTranslations("status");
-  const checks = await statusChecks();
+  const { checks, checkedAt } = await statusSnapshot();
   const worst: Verdict = checks.some((c) => c.verdict === "degraded")
     ? "degraded"
     : "ok";
 
   return (
     <div className="shell py-16 sm:py-24">
+      <BackHome />
       <Reveal>
-        <p className="prompt">{t("prompt")}</p>
+        <p className="prompt mt-8">{t("prompt")}</p>
         <h1 className="mt-5 max-w-3xl font-display text-section leading-[1.06] tracking-tight text-balance text-ink">
           {t("title")}
         </h1>
@@ -76,6 +78,14 @@ export default async function StatusPage({
           <span className={`size-2 rounded-full ${DOT[worst]}`} />
           {t(`overall.${worst}`)}
         </div>
+        <p className="mt-4 font-mono text-xs text-faint">
+          {t("checkedAt", {
+            time: new Intl.DateTimeFormat(locale === "pt" ? "pt-PT" : locale, {
+              dateStyle: "medium",
+              timeStyle: "medium",
+            }).format(checkedAt),
+          })}
+        </p>
       </Reveal>
 
       <dl className="mt-10 divide-y divide-line/70 border-y border-line/70">
@@ -114,6 +124,22 @@ export default async function StatusPage({
         </p>
         <p>{t("privacy")}</p>
       </div>
+
+      <aside className="mt-10 max-w-3xl rounded-sm border border-line bg-panel p-5 sm:p-6">
+        <p className="font-mono text-[11px] tracking-wide text-wire uppercase">
+          {t("diagnoseLabel")}
+        </p>
+        <h2 className="mt-3 font-display text-lg tracking-tight text-ink">
+          {t("diagnoseTitle")}
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-dim">
+          {t("diagnoseBody")}
+        </p>
+        <code className="mt-4 block font-mono text-sm text-signal-soft">
+          <span className="text-faint select-none">$ </span>
+          /doctor
+        </code>
+      </aside>
     </div>
   );
 }

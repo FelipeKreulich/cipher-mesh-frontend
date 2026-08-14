@@ -18,9 +18,13 @@ export const site = {
   docs: `${REPO}/blob/master/docs/ARCHITECTURE.md`,
   pluginDocs: `${REPO}/blob/master/docs/PLUGINS.md`,
   selfhostDocs: `${REPO}/blob/master/deploy/README.md`,
+  releases: `${REPO}/releases/latest`,
+  protocolDocs: `${REPO}/blob/master/docs/PROTOCOL.md`,
   contributing: `${REPO}/blob/master/CONTRIBUTING.md`,
   terms: `${REPO}/blob/master/TERMS.md`,
   security: `${REPO}/blob/master/SECURITY.md`,
+  advisories: `${REPO}/security/advisories`,
+  reportVulnerability: `${REPO}/security/advisories/new`,
   coffee: "https://www.buymeacoffee.com/felipekreulich",
 } as const;
 
