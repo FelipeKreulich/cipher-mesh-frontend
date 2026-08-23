@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { Reveal } from "@/components/site/reveal";
-import type { Release } from "@/lib/changelog";
+import { releaseAnchor, type Release } from "@/lib/changelog";
 import { inlineMarkdown } from "@/lib/inline-markdown";
 import { site } from "@/lib/site";
 
@@ -43,10 +43,27 @@ export async function Timeline({ releases }: { releases: Release[] }) {
         const latest = index === 0 && !release.summary;
 
         return (
-          <li key={release.version} className="relative pb-12 pl-7 md:pl-0">
+          <li
+            key={release.version}
+            // An anchor per release, so `/changelog#v2.12.0` is a link you can
+            // send — and so the palette can land on the release somebody chose
+            // rather than at the top of the page. The headings that are not a
+            // version ("2.6.0 and earlier") get none: there is no such release
+            // to link to.
+            id={release.summary ? undefined : releaseAnchor(release.version)}
+            className="relative scroll-mt-24 pb-12 pl-7 md:pl-0"
+          >
             <Reveal>
               <div className="md:flex md:gap-8">
-                <div className="md:w-36 md:shrink-0 md:text-right">
+                {/* The node sits at exactly `left-36`, the right edge of
+                    this column, so right-aligned text runs straight into it.
+                    The padding is what holds the version off the rail — and it
+                    has to be padding rather than a narrower column, because the
+                    node and the rail are positioned against that same 9rem.
+                    32px, matching the `gap-8` on the other side of the rail:
+                    20px still read as touching once the newest node's glow was
+                    on it. */}
+                <div className="md:w-36 md:shrink-0 md:pr-8 md:text-right">
                   <span
                     aria-hidden="true"
                     className={`absolute left-0 mt-[7px] size-[11px] rounded-full border-2 md:left-36 ${

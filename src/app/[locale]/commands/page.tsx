@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { CommandBrowser } from "@/components/commands/command-browser";
-import { BackHome } from "@/components/site/back-home";
-import { Reveal } from "@/components/site/reveal";
+import { PageIntro } from "@/components/site/page-intro";
 import { routing } from "@/i18n/routing";
 import { commandReference } from "@/lib/commands";
 import { site } from "@/lib/site";
@@ -66,37 +65,34 @@ export default async function CommandsPage({
   const reference = await commandReference();
 
   return (
-    <div className="shell py-16 sm:py-24">
-      <BackHome />
-      <Reveal>
-        <p className="prompt mt-8">{t("prompt")}</p>
-        <h1 className="mt-5 max-w-3xl font-display text-section leading-[1.06] tracking-tight text-balance text-ink">
-          {t("title")}
-        </h1>
-        <p className="prose-body mt-5 max-w-2xl">
-          {t("lead", {
-            commands: reference.counts.total,
-            p2p: reference.counts.p2p,
-          })}
+    <>
+      <PageIntro
+        prompt={t("prompt")}
+        title={t("title")}
+        lead={t("lead", {
+          commands: reference.counts.total,
+          p2p: reference.counts.p2p,
+        })}
+      />
+
+      <div className="shell pb-16 sm:pb-24">
+        <div className="mt-10">
+          <CommandBrowser groups={reference.groups} />
+        </div>
+
+        <p className="mt-14 max-w-3xl text-sm leading-relaxed text-faint">
+          {t("generated")}{" "}
+          <a
+            href={`${site.repo}/blob/master/docs/commands.json`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-signal-soft underline underline-offset-2 hover:text-ink"
+          >
+            docs/commands.json
+          </a>
+          .
         </p>
-      </Reveal>
-
-      <div className="mt-10">
-        <CommandBrowser groups={reference.groups} />
       </div>
-
-      <p className="mt-14 max-w-3xl text-sm leading-relaxed text-faint">
-        {t("generated")}{" "}
-        <a
-          href={`${site.repo}/blob/master/docs/commands.json`}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="text-signal-soft underline underline-offset-2 hover:text-ink"
-        >
-          docs/commands.json
-        </a>
-        .
-      </p>
-    </div>
+    </>
   );
 }

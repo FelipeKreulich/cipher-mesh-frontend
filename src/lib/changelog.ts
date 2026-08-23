@@ -18,6 +18,17 @@ export type Release = {
   changes: Change[];
 };
 
+/**
+ * The fragment for one release, so `/changelog#v2.12.0` is a link you can send
+ * someone — the same promise `/commands#verify` already makes.
+ *
+ * `v` + the version is the git tag, which is also what the "release" link on
+ * each entry points at. One spelling for one release, wherever it is written.
+ * Note this is a fragment, not a CSS selector: the dots mean `#v2.12.0` has to
+ * be looked up with `getElementById`, never `querySelector`.
+ */
+export const releaseAnchor = (version: string) => `v${version}`;
+
 /** Enough of a fallback to keep the page honest if GitHub is unreachable. */
 const FALLBACK: Release[] = [
   {
