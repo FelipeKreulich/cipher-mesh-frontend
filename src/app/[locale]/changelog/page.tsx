@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Timeline } from "@/components/changelog/timeline";
-import { BackHome } from "@/components/site/back-home";
-import { Reveal } from "@/components/site/reveal";
+import { PageIntro } from "@/components/site/page-intro";
 import { routing } from "@/i18n/routing";
 import { changelog } from "@/lib/changelog";
 import { site } from "@/lib/site";
@@ -67,34 +66,33 @@ export default async function ChangelogPage({
   const current = releases.find((release) => !release.summary);
 
   return (
-    <div className="shell py-16 sm:py-24">
-      <BackHome />
-      <Reveal>
-        <p className="prompt mt-8">{t("prompt")}</p>
-        <h1 className="mt-5 max-w-3xl font-display text-section leading-[1.06] tracking-tight text-balance text-ink">
-          {t("title")}
-        </h1>
-        <p className="prose-body mt-5 max-w-2xl">
-          {current ? t("lead", { version: current.version }) : t("leadPlain")}
+    <>
+      <PageIntro
+        prompt={t("prompt")}
+        title={t("title")}
+        lead={
+          current ? t("lead", { version: current.version }) : t("leadPlain")
+        }
+      />
+
+      <div className="shell pb-16 sm:pb-24">
+        <div className="mt-14">
+          <Timeline releases={releases} />
+        </div>
+
+        <p className="mt-6 max-w-3xl text-sm leading-relaxed text-faint">
+          {t("note")}{" "}
+          <a
+            href={`${site.repo}/releases`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-signal-soft underline underline-offset-2 hover:text-ink"
+          >
+            {t("releases")}
+          </a>
+          .
         </p>
-      </Reveal>
-
-      <div className="mt-14">
-        <Timeline releases={releases} />
       </div>
-
-      <p className="mt-6 max-w-3xl text-sm leading-relaxed text-faint">
-        {t("note")}{" "}
-        <a
-          href={`${site.repo}/releases`}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="text-signal-soft underline underline-offset-2 hover:text-ink"
-        >
-          {t("releases")}
-        </a>
-        .
-      </p>
-    </div>
+    </>
   );
 }
