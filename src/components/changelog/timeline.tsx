@@ -55,7 +55,15 @@ export async function Timeline({ releases }: { releases: Release[] }) {
           >
             <Reveal>
               <div className="md:flex md:gap-8">
-                <div className="md:w-36 md:shrink-0 md:text-right">
+                {/* The node sits at exactly `left-36`, the right edge of
+                    this column, so right-aligned text runs straight into it.
+                    The padding is what holds the version off the rail — and it
+                    has to be padding rather than a narrower column, because the
+                    node and the rail are positioned against that same 9rem.
+                    32px, matching the `gap-8` on the other side of the rail:
+                    20px still read as touching once the newest node's glow was
+                    on it. */}
+                <div className="md:w-36 md:shrink-0 md:pr-8 md:text-right">
                   <span
                     aria-hidden="true"
                     className={`absolute left-0 mt-[7px] size-[11px] rounded-full border-2 md:left-36 ${
