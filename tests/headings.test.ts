@@ -16,18 +16,20 @@ import { describe, expect, it } from "vitest";
  */
 
 /**
- * `/status` writes its own `h1` and deliberately does not scramble it.
+ * Nothing is exempt any more.
  *
- * It is `force-dynamic`, and pulling GSAP onto a route that renders on demand
- * stops it sharing the scramble chunk with the static pages: the chunker writes
- * GSAP and `motion` into three per-route copies instead of one. Measured at
- * +105 KiB gzipped across the site — 383.1 KiB before, 488.4 KiB after, against
- * a 419.9 KiB budget. A hover flourish on one heading does not buy that, least
- * of all on the page people open when they already think something is broken.
+ * `/status` used to be: it is `force-dynamic`, and a route rendered on demand
+ * does not share entry chunks with the static ones, so putting the GSAP-backed
+ * scramble on it wrote GSAP and `motion` into three per-route copies instead of
+ * one — +105 KiB gzipped across the site, over budget, for a hover flourish on
+ * the page people open when they already think something is broken.
  *
- * Tracked in #54. Closing it means deleting this set.
+ * #54 removed the dependency rather than the effect: the scramble is a few
+ * dozen lines of requestAnimationFrame now, GSAP is gone from the site, and
+ * every page can afford it. Kept as an empty set on purpose — an exemption has
+ * to be added deliberately, with a measurement and an issue, the way #54 was.
  */
-const NO_SCRAMBLE = new Set(["status"]);
+const NO_SCRAMBLE = new Set<string>([]);
 
 const root = process.cwd();
 const routes = `${root}/src/app/[locale]`;
@@ -61,10 +63,18 @@ describe("page headings", () => {
     expect(source).toContain("ScrambledText");
   });
 
-  it("keeps the exemption list down to the one page that earns it", () => {
+  it("exempts no page at all", () => {
     // An allowlist nobody prunes is how the rule dies. Anything added here has
     // to come with a measurement and an issue, the way #54 did.
-    expect([...NO_SCRAMBLE]).toEqual(["status"]);
+    expect([...NO_SCRAMBLE]).toEqual([]);
+  });
+
+  it("checks the page that used to be exempt", () => {
+    // The reason status was exempt is gone, so the point of this file is that
+    // status is now one of the pages the rule above actually runs on.
+    const status = all.find((page) => page.name === "status");
+    expect(status?.source).toContain("<h1");
+    expect(status?.source).toContain("ScrambledText");
   });
 
   it.each(["commands", "changelog"])(
